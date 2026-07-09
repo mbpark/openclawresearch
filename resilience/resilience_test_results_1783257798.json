@@ -1,0 +1,165 @@
+{
+  "timestamp": 1783257798.555007,
+  "metrics": [
+    {
+      "timestamp": 1783257798.554833,
+      "total_requests": 17,
+      "successful_requests": 16,
+      "failed_requests": 1,
+      "success_rate": 94.11764705882352,
+      "avg_response_time": 0.001865088939666748,
+      "min_response_time": 0.0011138916015625,
+      "max_response_time": 0.0027670860290527344,
+      "median_response_time": 0.001824498176574707,
+      "std_dev": 0.000482670166711131
+    }
+  ],
+  "detailed_results": [
+    {
+      "test_name": "create_transaction",
+      "success": true,
+      "response_time": 0.002737760543823242,
+      "error_message": null,
+      "timestamp": 1783257798.5233989,
+      "metadata": {
+        "success": true,
+        "transaction_id": 18,
+        "timestamp": 1783257798.5229728,
+        "request_id": null
+      }
+    },
+    {
+      "test_name": "get_transaction_18",
+      "success": true,
+      "response_time": 0.0027670860290527344,
+      "error_message": null,
+      "timestamp": 1783257798.526198,
+      "metadata": null
+    },
+    {
+      "test_name": "create_checkpoint",
+      "success": true,
+      "response_time": 0.002106904983520508,
+      "error_message": null,
+      "timestamp": 1783257798.528411,
+      "metadata": {
+        "success": true,
+        "checkpoint_id": "checkpoint_1783257798527",
+        "recovery_time": 0.00047707557678222656,
+        "timestamp": 1783257798.528106
+      }
+    },
+    {
+      "test_name": "recover_3",
+      "success": false,
+      "response_time": null,
+      "error_message": "Status code: 404",
+      "timestamp": 1783257798.532028,
+      "metadata": null
+    },
+    {
+      "test_name": "inject_timeout",
+      "success": true,
+      "response_time": 0.0012462139129638672,
+      "error_message": null,
+      "timestamp": 1783257798.533338,
+      "metadata": null
+    },
+    {
+      "test_name": "inject_crash",
+      "success": true,
+      "response_time": 0.0011210441589355469,
+      "error_message": null,
+      "timestamp": 1783257798.534486,
+      "metadata": null
+    },
+    {
+      "test_name": "inject_reset",
+      "success": true,
+      "response_time": 0.0011138916015625,
+      "error_message": null,
+      "timestamp": 1783257798.535626,
+      "metadata": null
+    },
+    {
+      "test_name": "load_test_0",
+      "success": true,
+      "response_time": 0.0018229484558105469,
+      "error_message": null,
+      "timestamp": 1783257798.537558,
+      "metadata": null
+    },
+    {
+      "test_name": "load_test_1",
+      "success": true,
+      "response_time": 0.0018260478973388672,
+      "error_message": null,
+      "timestamp": 1783257798.539413,
+      "metadata": null
+    },
+    {
+      "test_name": "load_test_2",
+      "success": true,
+      "response_time": 0.0017619132995605469,
+      "error_message": null,
+      "timestamp": 1783257798.541205,
+      "metadata": null
+    },
+    {
+      "test_name": "load_test_3",
+      "success": true,
+      "response_time": 0.0017511844635009766,
+      "error_message": null,
+      "timestamp": 1783257798.542984,
+      "metadata": null
+    },
+    {
+      "test_name": "load_test_4",
+      "success": true,
+      "response_time": 0.0020399093627929688,
+      "error_message": null,
+      "timestamp": 1783257798.545056,
+      "metadata": null
+    },
+    {
+      "test_name": "load_test_5",
+      "success": true,
+      "response_time": 0.002110004425048828,
+      "error_message": null,
+      "timestamp": 1783257798.5471969,
+      "metadata": null
+    },
+    {
+      "test_name": "load_test_6",
+      "success": true,
+      "response_time": 0.002221822738647461,
+      "error_message": null,
+      "timestamp": 1783257798.549456,
+      "metadata": null
+    },
+    {
+      "test_name": "load_test_7",
+      "success": true,
+      "response_time": 0.0018687248229980469,
+      "error_message": null,
+      "timestamp": 1783257798.551355,
+      "metadata": null
+    },
+    {
+      "test_name": "load_test_8",
+      "success": true,
+      "response_time": 0.0018169879913330078,
+      "error_message": null,
+      "timestamp": 1783257798.553202,
+      "metadata": null
+    },
+    {
+      "test_name": "load_test_9",
+      "success": true,
+      "response_time": 0.0015289783477783203,
+      "error_message": null,
+      "timestamp": 1783257798.5547562,
+      "metadata": null
+    }
+  ]
+}

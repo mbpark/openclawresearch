@@ -1,0 +1,28 @@
+[
+  {
+    "application_name": "resilience_test_app",
+    "resilience_score": 60,
+    "has_circuit_breaker": false,
+    "has_retry_logic": false,
+    "has_fallback": false,
+    "has_timeout": true,
+    "has_monitoring": true,
+    "has_checkpointing": true,
+    "response_time_avg": 0.001601266860961914,
+    "success_rate": 100.0,
+    "notes": "Score: 60/100, Success rate: 100.0%, Response time: 0.0016s"
+  },
+  {
+    "application_name": "resilience_patterns",
+    "resilience_score": 0,
+    "has_circuit_breaker": false,
+    "has_retry_logic": false,
+    "has_fallback": false,
+    "has_timeout": false,
+    "has_monitoring": false,
+    "has_checkpointing": false,
+    "response_time_avg": 0,
+    "success_rate": 0,
+    "notes": "Pattern benchmark failed: name 'CircuitBreakerState' is not defined"
+  }
+]

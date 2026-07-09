@@ -1,0 +1,684 @@
+{
+  "timestamp": "2026-07-07T13:09:05.175031",
+  "alerts_count": 1000,
+  "monitored_files": 235161,
+  "running": true,
+  "thresholds": {
+    "network_connections_per_minute": 50,
+    "file_changes_per_hour": 100,
+    "suspicious_port_ports": [
+      4444,
+      5555,
+      6666,
+      31337,
+      12345,
+      54321
+    ],
+    "known_malicious_ips": [
+      "192.168.1.100",
+      "10.0.0.1"
+    ]
+  },
+  "recent_alerts": [
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:24.715870",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:24.715848",
+        "file_path": "/usr/bin/jconsole",
+        "new_hash": "d641f84fbed5fcd611d603fe5aa364f152462d7d099e09eeaf36f046be4c3f32",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:24.822892",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:24.822871",
+        "file_path": "/usr/bin/paste",
+        "new_hash": "bef4e8e3eb03b7cf0cda1d0e0272d4c308f95b106823ff0e1d84fd26072e0596",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:24.924103",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:24.924085",
+        "file_path": "/usr/bin/bzip2",
+        "new_hash": "c9c5d486ee877f9104363ee0fe20539d4c1fbbb76f2f322d5e871f40aaf6ce26",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:25.025770",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:25.025755",
+        "file_path": "/usr/bin/uucp",
+        "new_hash": "438451cee8f9795a8bbfb9fa5434f75db6df72aef35241561d5d8225adbac922",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:25.126921",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:25.126895",
+        "file_path": "/usr/bin/passwd",
+        "new_hash": "b28d8c30828e393d367a7c1b14bb96bb4b6cb30021f24e59360817fef02f27b7",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:25.229356",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:25.229335",
+        "file_path": "/usr/bin/moose-outdated5.34",
+        "new_hash": "359597af7b1c1691ec0502184b006aa5ffa49915be504284d1383bcca11a4e96",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:25.328838",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:25.328814",
+        "file_path": "/usr/bin/uuidgen",
+        "new_hash": "3f8537ec1eeed30b6bc3defa3736c5042890bdd6de2d253f2b521efb6249ea92",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:25.429271",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:25.429253",
+        "file_path": "/usr/bin/install_name_tool",
+        "new_hash": "179301dcb41ea78accc3fa0048a7e6f6710d891945a751a34addd622020c1818",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:25.528830",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:25.528817",
+        "file_path": "/usr/bin/cmpdylib",
+        "new_hash": "179301dcb41ea78accc3fa0048a7e6f6710d891945a751a34addd622020c1818",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:25.626821",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:25.626805",
+        "file_path": "/usr/bin/pod2text5.34",
+        "new_hash": "3d1271451a600279fe8aaa0e7d58d7fdf4385a8fb025962709db1d540376a0a5",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:25.725160",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:25.725135",
+        "file_path": "/usr/bin/devicectl",
+        "new_hash": "5bf2fc1d9f82b399e5edea28583262096dbe32ac20c0ecee86257d3a22721986",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:25.823872",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:25.823853",
+        "file_path": "/usr/bin/zfgrep",
+        "new_hash": "dd3e6b31db4e2f5c165166949fba103a54bd79cdc72db59b0fbf1809b82f21cf",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:25.923628",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:25.923610",
+        "file_path": "/usr/bin/aea",
+        "new_hash": "58f43cb2a803332efe687d73d79a4a5449b22cfc2eba70193aa9ff0f20af25d5",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:26.024937",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:26.024921",
+        "file_path": "/usr/bin/snfsdefrag",
+        "new_hash": "eec2773fa3754ec502490402a6b70e259cb1909535c92d9915b0aa762487a4db",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:26.125062",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:26.125048",
+        "file_path": "/usr/bin/zipdetails",
+        "new_hash": "9fa9f28c16d9932340b1888b910dfb28d038b11ab29d88f76f3bf1a7856dfd37",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:26.226777",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:26.226765",
+        "file_path": "/usr/bin/look",
+        "new_hash": "a6ef113e012e2016a679b5cfba467e7cb2808ce0184681f75366262c456548f6",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:26.326957",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:26.326943",
+        "file_path": "/usr/bin/col",
+        "new_hash": "c64e06c643584ff1b6754127bbec7c2d0b34f02f60ff9730fb768bd5e42b30d6",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:26.428598",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:26.428585",
+        "file_path": "/usr/bin/dscacheutil",
+        "new_hash": "e975df98830f60191527262bb2158502baa1086db735941d99beeffe3aa301b8",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:26.532666",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:26.532643",
+        "file_path": "/usr/bin/usdzip",
+        "new_hash": "f9ed1777bd94934cb38dbe0d8be533bb702ede398f025eb25c9e3ff3c8545187",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:26.633097",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:26.633076",
+        "file_path": "/usr/bin/zforce",
+        "new_hash": "8077aa5dfe054acfcf4fd7c5f757e17344397f9555c95aed15cac1d2c17cc90f",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:26.736052",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:26.736034",
+        "file_path": "/usr/bin/lwp-mirror",
+        "new_hash": "88507cede987da1cd61ab0d7782e18ac8468910b00137086f45380195f12924e",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:26.841286",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:26.841271",
+        "file_path": "/usr/bin/malloc_history",
+        "new_hash": "74d72df51358aba1903d27de5c708e4726108404cd5fa1b792723bd48555be90",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:26.945835",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:26.945820",
+        "file_path": "/usr/bin/cpio",
+        "new_hash": "af7ec27022fdd460c63a2838d38621117383bce09176b1c7e27db48a91a20295",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:27.047721",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:27.047705",
+        "file_path": "/usr/bin/h2ph5.34",
+        "new_hash": "86c19c01835bba602e1e954e48b69846286c9deaf453ea30d63d72190832bdb0",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:27.150702",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:27.150685",
+        "file_path": "/usr/bin/nohup",
+        "new_hash": "e7d6a7287e97621b22accc2b29b97f7a019147880e4f6f87432c20596ba2e853",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:27.252204",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:27.252182",
+        "file_path": "/usr/bin/kcc",
+        "new_hash": "6172cc3f2cf3849567172c2ab2d7863f93159ea31ef8a7e50d3b768190c788cf",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:27.353995",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:27.353977",
+        "file_path": "/usr/bin/ulimit",
+        "new_hash": "6b84445c57c474382fd4083629b8308d189e10a9a2bbd66c06b288e56b5b08a8",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:27.454336",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:27.454321",
+        "file_path": "/usr/bin/rails",
+        "new_hash": "c3a2ae0f82b1084ccde42bb68a8e7b35e9e593779ac37138e76f7e7ee3a41d1a",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:27.562822",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:27.562802",
+        "file_path": "/usr/bin/bspatch",
+        "new_hash": "2711cd1695df2164e8c0019d2b74f9c399952886f6d50c2e18318fc37f74d5b7",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:27.663929",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:27.663910",
+        "file_path": "/usr/bin/hotspot.d",
+        "new_hash": "05894cc0f0b96e6d61e715502c42bdafa026c65fbc4b4ca3935f444740c2af06",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:27.767145",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:27.767134",
+        "file_path": "/usr/bin/cvaffinity",
+        "new_hash": "eec2773fa3754ec502490402a6b70e259cb1909535c92d9915b0aa762487a4db",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:27.868597",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:27.868581",
+        "file_path": "/usr/bin/xsubpp5.34",
+        "new_hash": "c8c0f265dd2f3f247f179a5464bddfe6391b9e06996e961fa15c51c2e26e39a3",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:27.968733",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:27.968709",
+        "file_path": "/usr/bin/gatherheaderdoc",
+        "new_hash": "179301dcb41ea78accc3fa0048a7e6f6710d891945a751a34addd622020c1818",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:28.071417",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:28.071394",
+        "file_path": "/usr/bin/ppdi",
+        "new_hash": "c396b3e0caeeaaa78f2307ee2a89edb7b80afb9ac9bece683f3ff766513c3a93",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:28.173617",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:28.173604",
+        "file_path": "/usr/bin/pcap-config",
+        "new_hash": "c262059b0b412b9737a6f365a680eac7a8a74a90e8134b7cbdeb0f34e28cd3f7",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:28.277180",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:28.277155",
+        "file_path": "/usr/bin/jpackage",
+        "new_hash": "d641f84fbed5fcd611d603fe5aa364f152462d7d099e09eeaf36f046be4c3f32",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:28.378715",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:28.378694",
+        "file_path": "/usr/bin/avmetareadwrite",
+        "new_hash": "9f12e0a07c5a88fc9a40ff7dc3627532384375b32d527168235b1cdda1ccd8f3",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:28.482240",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:28.482215",
+        "file_path": "/usr/bin/gen_bridge_metadata",
+        "new_hash": "a666ee710bf74227133407750230e98416caeadf3060cc6bf8662c7c5adca99f",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:28.591515",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:28.591488",
+        "file_path": "/usr/bin/parl5.34",
+        "new_hash": "4a4db061ba8756c284ab49848ad9ecc1ca06af87bc5b63f4741d8e2ca4fe2405",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:28.693292",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:28.693269",
+        "file_path": "/usr/bin/gem",
+        "new_hash": "33d3de0ce69f659ed5e3d0c7bfd3c56f2b57729e2785f09957356bd0f026b9bc",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:28.796456",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:28.796441",
+        "file_path": "/usr/bin/opendiff",
+        "new_hash": "065de0d338384b483be271b9cc8ef83b019788ec786c985d9dab07d5913ecdbb",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:28.896751",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:28.896734",
+        "file_path": "/usr/bin/talk",
+        "new_hash": "6d29a0297c5d48f8e1c23ca6943e3c02d13d9c863c166a62395bebef1241e8b5",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:28.998478",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:28.998457",
+        "file_path": "/usr/bin/stz",
+        "new_hash": "12d6f84a9623b1ed04ec09c7b885f6d6086a4156d116b24ead246d042de24471",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:29.103071",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:29.103049",
+        "file_path": "/usr/bin/expect",
+        "new_hash": "74c20f3027d30cd63cfd51f6ee981f95ecdbcb69c5ef5abcda9b5b1239af1115",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:29.203634",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:29.203615",
+        "file_path": "/usr/bin/jimage",
+        "new_hash": "d641f84fbed5fcd611d603fe5aa364f152462d7d099e09eeaf36f046be4c3f32",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:29.306205",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:29.306190",
+        "file_path": "/usr/bin/lockstat",
+        "new_hash": "4305c1a87b4dbc2483bf600c1f37f9eaa7a8f4f4553941d1cec4463c030e1b75",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:29.408194",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:29.408178",
+        "file_path": "/usr/bin/dapptrace",
+        "new_hash": "2f323f7229d8e3b2a3fa26b0abae47c933805a2dbe0ff77365b86fcd01640154",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:29.512199",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:29.512179",
+        "file_path": "/usr/bin/xattr",
+        "new_hash": "3cc7308e9dfd687b0b7f4778a6101633aa9dce5ccdd012cf17cd858848295162",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:29.613197",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:29.613172",
+        "file_path": "/usr/bin/w",
+        "new_hash": "ca5193bb7ab87e9f2953bee4b07dbee1319e31ae3b44482f274fc803243a655e",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    },
+    {
+      "id": 1001,
+      "timestamp": "2026-07-07T12:44:29.716931",
+      "type": "new_file_detected",
+      "change": {
+        "timestamp": "2026-07-07T12:44:29.716911",
+        "file_path": "/usr/bin/gunzip",
+        "new_hash": "b5a438a48c447a89ef7f4681e17714c373c08ad10386b61a19168139e7522c22",
+        "change_type": "creation",
+        "threat_level": "medium"
+      },
+      "severity": "high"
+    }
+  ],
+  "alert_summary": {
+    "new_file_detected": {
+      "total": 1000,
+      "high": 1000,
+      "medium": 0,
+      "low": 0
+    }
+  },
+  "network_connections_count": 0,
+  "file_hashes_count": 235161
+}

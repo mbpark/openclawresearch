@@ -1,0 +1,116 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "Resilience Test Dashboard",
+    "tags": ["resilience", "testing"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Request Success Rate",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "rate(app_requests_total{status!=\"5xx\"}[5m]) * 100",
+            "legendFormat": "Success Rate"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}
+      },
+      {
+        "id": 2,
+        "title": "Response Time (ms)",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.5, rate(app_request_duration_seconds_bucket[5m])) * 1000",
+            "legendFormat": "Median"
+          },
+          {
+            "expr": "histogram_quantile(0.95, rate(app_request_duration_seconds_bucket[5m])) * 1000",
+            "legendFormat": "95th percentile"
+          },
+          {
+            "expr": "histogram_quantile(0.99, rate(app_request_duration_seconds_bucket[5m])) * 1000",
+            "legendFormat": "99th percentile"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0}
+      },
+      {
+        "id": 3,
+        "title": "Requests per Second",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(app_requests_total[5m])",
+            "legendFormat": "Request Rate"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}
+      },
+      {
+        "id": 4,
+        "title": "Error Rate",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(app_errors_total[5m])",
+            "legendFormat": "Error Rate"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8}
+      },
+      {
+        "id": 5,
+        "title": "Active Connections",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "app_active_connections",
+            "legendFormat": "Active Connections"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16}
+      },
+      {
+        "id": 6,
+        "title": "Checkpoints Created",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(app_checkpoints_total[5m])",
+            "legendFormat": "Checkpoint Rate"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 16}
+      },
+      {
+        "id": 7,
+        "title": "Recovery Time",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.5, rate(app_recovery_time_seconds_bucket[5m]))",
+            "legendFormat": "Median Recovery Time"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 24}
+      },
+      {
+        "id": 8,
+        "title": "Failures Injected",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "increase(app_errors_total{error_type=\"simulated_failure\"}[1h])",
+            "legendFormat": "Failures Injected"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 24}
+      }
+    ],
+    "time": {"from": "now-1h", "to": "now"},
+    "refresh": "10s"
+  }
+}

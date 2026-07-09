@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PolinRider Defense Dashboard</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #1a1a2e;
+            color: #eaeaea;
+        }
+        .dashboard {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #00d9ff;
+            font-size: 2.5em;
+            margin: 0;
+        }
+        .threat-level {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 2em;
+            font-weight: bold;
+        }
+        .threat-level.low {
+            background-color: #28a745;
+            color: white;
+        }
+        .threat-level.medium {
+            background-color: #ffc107;
+            color: black;
+        }
+        .threat-level.high {
+            background-color: #dc3545;
+            color: white;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .card {
+            background-color: #16213e;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        .card h2 {
+            color: #00d9ff;
+            margin-top: 0;
+            border-bottom: 2px solid #00d9ff;
+            padding-bottom: 10px;
+        }
+        .scan-results {
+            margin: 15px 0;
+        }
+        .scan-item {
+            padding: 10px;
+            margin: 5px 0;
+            background-color: #0f3460;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .alert {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border-left: 4px solid;
+        }
+        .alert.critical {
+            background-color: #721c24;
+            border-color: #dc3545;
+            color: #f8d7da;
+        }
+        .alert.high {
+            background-color: #856404;
+            border-color: #ffc107;
+            color: #fff3cd;
+        }
+        .alert.medium {
+            background-color: #0c5460;
+            border-color: #17a2b8;
+            color: #d1ecf1;
+        }
+        .alert.low {
+            background-color: #155724;
+            border-color: #28a745;
+            color: #d4edda;
+        }
+        .graph-container {
+            height: 200px;
+            background-color: #0f3460;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .export-buttons {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .btn {
+            background-color: #00d9ff;
+            color: #1a1a2e;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn:hover {
+            background-color: #00b8d4;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .status-indicator.online {
+            background-color: #28a745;
+        }
+        .status-indicator.offline {
+            background-color: #dc3545;
+        }
+        .timestamp {
+            text-align: center;
+            color: #888;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="header">
+            <h1>🛡️ PolinRider Defense Dashboard</h1>
+            <p>Real-time Threat Monitoring and Incident Response</p>
+        </div>
+
+        <div id="threatLevel" class="threat-level low">
+            <span class="status-indicator online"></span>
+            Threat Level: LOW
+        </div>
+
+        <div class="export-buttons">
+            <button class="btn" onclick="exportReport('pdf')">📄 Export PDF</button>
+            <button class="btn" onclick="exportReport('csv')">📊 Export CSV</button>
+            <button class="btn" onclick="refreshData()">🔄 Refresh</button>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <h2>📦 Package Scan Results</h2>
+                <div id="scanResults" class="scan-results">
+                    <div class="scan-item">
+                        <span>npm Packages Scanned</span>
+                        <span id="npmCount">0</span>
+                    </div>
+                    <div class="scan-item">
+                        <span>Go Modules Checked</span>
+                        <span id="goCount">0</span>
+                    </div>
+                    <div class="scan-item">
+                        <span>Security Alerts</span>
+                        <span id="alertCount">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>🌐 Network Activity</h2>
+                <div class="graph-container">
+                    <canvas id="networkGraph" width="300" height="200"></canvas>
+                    <div style="position: absolute; text-align: center;">
+                        <div id="activeConnections">0</div>
+                        <div>Active Connections</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>🚨 Recent Alerts</h2>
+                <div id="alertHistory">
+                    <div class="alert low">
+                        <div><strong>Low Priority</strong></div>
+                        <div>System scan completed successfully</div>
+                        <div style="font-size: 0.8em; margin-top: 5px;">2026-07-04 16:20:00</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>⚙️ System Status</h2>
+                <div id="systemStatus">
+                    <div class="scan-item">
+                        <span>Monitoring Status</span>
+                        <span id="monitoringStatus" style="color: #28a745;">🟢 Active</span>
+                    </div>
+                    <div class="scan-item">
+                        <span>Last Scan</span>
+                        <span id="lastScan">Never</span>
+                    </div>
+                    <div class="scan-item">
+                        <span>Database Status</span>
+                        <span id="databaseStatus" style="color: #28a745;">🟢 Connected</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="timestamp">
+            Last updated: <span id="lastUpdate">Never</span>
+        </div>
+    </div>
+
+    <script>
+        // PolinRider Defense Dashboard - Main JavaScript
+        let dashboardData = {
+            threatLevel: 'low',
+            scanResults: {
+                npmPackages: 0,
+                goModules: 0,
+                alerts: 0
+            },
+            networkConnections: 0,
+            alerts: [],
+            lastScan: null,
+            monitoring: true
+        };
+
+        function updateDashboard() {
+            // Load data from research database
+            fetch('polinrider_database.json')
+                .then(response => response.json())
+                .then(data => {
+                    dashboardData = data;
+                    renderDashboard();
+                })
+                .catch(error => {
+                    console.error('Error loading dashboard data:', error);
+                    updateSystemStatus('⚠️ Data unavailable');
+                });
+        }
+
+        function renderDashboard() {
+            // Update threat level
+            const threatLevelEl = document.getElementById('threatLevel');
+            threatLevelEl.className = `threat-level ${dashboardData.threatLevel}`;
+            threatLevelEl.innerHTML = `
+                <span class="status-indicator ${dashboardData.monitoring ? 'online' : 'offline'}"></span>
+                Threat Level: ${dashboardData.threatLevel.toUpperCase()}
+            `;
+
+            // Update scan results
+            document.getElementById('npmCount').textContent = dashboardData.scanResults?.npmPackages || 0;
+            document.getElementById('goCount').textContent = dashboardData.scanResults?.goModules || 0;
+            document.getElementById('alertCount').textContent = dashboardData.scanResults?.alerts || 0;
+
+            // Update network connections
+            document.getElementById('activeConnections').textContent = dashboardData.networkConnections || 0;
+
+            // Update alert history
+            const alertHistoryEl = document.getElementById('alertHistory');
+            alertHistoryEl.innerHTML = '';
+
+            if (dashboardData.alerts && dashboardData.alerts.length > 0) {
+                dashboardData.alerts.slice(-10).reverse().forEach(alert => {
+                    const alertEl = document.createElement('div');
+                    alertEl.className = `alert ${alert.severity.toLowerCase()}`;
+                    alertEl.innerHTML = `
+                        <div><strong>${alert.type}</strong></div>
+                        <div>${alert.message}</div>
+                        <div style="font-size: 0.8em; margin-top: 5px;">${alert.timestamp}</div>
+                    `;
+                    alertHistoryEl.appendChild(alertEl);
+                });
+            } else {
+                alertHistoryEl.innerHTML = '<div class="alert low">No recent alerts</div>';
+            }
+
+            // Update timestamps
+            document.getElementById('lastScan').textContent = dashboardData.lastScan || 'Never';
+            document.getElementById('lastUpdate').textContent = new Date().toLocaleString();
+
+            // Update system status
+            updateSystemStatus(dashboardData.monitoring ? '🟢 Active' : '🔴 Inactive');
+        }
+
+        function updateSystemStatus(status) {
+            document.getElementById('monitoringStatus').textContent = status;
+            const statusEl = document.getElementById('monitoringStatus');
+            if (status.includes('🟢')) {
+                statusEl.style.color = '#28a745';
+            } else if (status.includes('🔴')) {
+                statusEl.style.color = '#dc3545';
+            } else {
+                statusEl.style.color = '#ffc107';
+            }
+        }
+
+        function exportReport(format) {
+            const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+            const filename = `polinrider_report_${timestamp}.${format}`;
+
+            if (format === 'csv') {
+                exportToCSV(filename);
+            } else if (format === 'pdf') {
+                exportToPDF(filename);
+            }
+        }
+
+        function exportToCSV(filename) {
+            let csvContent = 'data:text/csv;charset=utf-8,';
+            csvContent += 'Timestamp,Type,Severity,Message\n';
+
+            dashboardData.alerts.forEach(alert => {
+                csvContent += `${alert.timestamp},${alert.type},${alert.severity},${alert.message}\n`;
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement('a');
+            link.setAttribute('href', encodedUri);
+            link.setAttribute('download', filename);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function exportToPDF(filename) {
+            // Simple PDF export using print functionality
+            window.print();
+        }
+
+        function refreshData() {
+            updateDashboard();
+        }
+
+        // Auto-refresh every 30 seconds
+        setInterval(updateDashboard, 30000);
+
+        // Initialize dashboard
+        updateDashboard();
+    </script>
+</body>
+</html>

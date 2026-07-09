@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VLMGuard Enhanced Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.4"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #1a1a2e; color: #e4e4e4; }
+        .container { padding: 20px; max-width: 1400px; margin: 0 auto; }
+        
+        header { background: #16213e; padding: 20px; margin-bottom: 30px; border-radius: 10px; }
+        h1 { color: #00d9ff; margin-bottom: 10px; }
+        .status { display: flex; gap: 20px; flex-wrap: wrap; }
+        .status-item { background: #0f3460; padding: 10px 20px; border-radius: 8px; font-size: 0.9em; }
+        .status-value { font-weight: bold; color: #00d9ff; }
+        
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .card { background: #16213e; padding: 20px; border-radius: 10px; }
+        .card h2 { color: #e94560; margin-bottom: 15px; font-size: 1.2em; }
+        
+        .chart-container { position: relative; height: 300px; }
+        .alert { padding: 15px; margin: 10px 0; border-radius: 8px; }
+        .alert-danger { background: #dc3545; color: white; }
+        .alert-warning { background: #ffc107; color: black; }
+        .alert-success { background: #28a745; color: white; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #0f3460; }
+        th { background: #0f3460; color: #00d9ff; }
+        tr:hover { background: #0f3460; }
+        
+        .progress-bar { background: #0f3460; border-radius: 10px; height: 20px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #28a745, #ffc107, #dc3545); transition: width 0.3s; }
+        
+        .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; }
+        .badge-danger { background: #dc3545; color: white; }
+        .badge-warning { background: #ffc107; color: black; }
+        .badge-success { background: #28a745; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🛡️ VLMGuard Enhanced Dashboard</h1>
+            <p>Real-time threat detection and analysis</p>
+            <div class="status">
+                <div class="status-item">Last Update: <span class="status-value" id="last-update">Loading...</span></div>
+                <div class="status-item">Active Monitors: <span class="status-value">3</span></div>
+                <div class="status-item">Threat Level: <span class="status-value" id="threat-level">Normal</span></div>
+            </div>
+        </header>
+
+        <div class="grid">
+            <!-- Threat Detection Summary -->
+            <div class="card">
+                <h2>📊 Threat Detection Summary</h2>
+                <div id="summary-stats">
+                    <p>Testing videos...</p>
+                </div>
+            </div>
+
+            <!-- Threat Score Distribution -->
+            <div class="card">
+                <h2>📈 Threat Score Distribution</h2>
+                <div class="chart-container">
+                    <canvas id="threatChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Attack Type Breakdown -->
+            <div class="card">
+                <h2>🎯 Attack Types Detected</h2>
+                <div class="chart-container">
+                    <canvas id="attackChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Recent Alerts -->
+            <div class="card">
+                <h2>🚨 Recent Alerts</h2>
+                <div id="alerts-container">
+                    <div class="alert alert-success">All systems operational</div>
+                </div>
+            </div>
+
+            <!-- Test Results Table -->
+            <div class="card">
+                <h2>📋 Test Results</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Video File</th>
+                            <th>Attack Type</th>
+                            <th>Score</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="results-table">
+                        <tr><td colspan="4">Loading results...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let threatChart, attackChart;
+        
+        function initCharts() {
+            // Threat Score Distribution Chart
+            const ctx1 = document.getElementById('threatChart').getContext('2d');
+            threatChart = new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: ['Low (0-0.3)', 'Medium (0.3-0.6)', 'High (0.6-0.8)', 'Critical (>0.8)'],
+                    datasets: [{
+                        label: 'Videos',
+                        data: [0, 0, 0, 0],
+                        backgroundColor: ['#28a745', '#17a2b8', '#ffc107', '#dc3545']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+                }
+            });
+
+            // Attack Types Chart
+            const ctx2 = document.getElementById('attackChart').getContext('2d');
+            attackChart = new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Credential Harvesting', 'System Prompt Leak', 'Data Exfiltration', 'Malware Execution', 'Other'],
+                    datasets: [{
+                        data: [0, 0, 0, 0, 0],
+                        backgroundColor: ['#dc3545', '#fd7e14', '#ffc107', '#28a745', '#6c757d']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+
+        function loadResults() {
+            fetch('research/multimodal/enhanced_video_test_results.json')
+                .then(response => response.json())
+                .then(data => {
+                    updateDashboard(data);
+                })
+                .catch(error => {
+                    console.error('Error loading results:', error);
+                    document.getElementById('results-table').innerHTML = 
+                        '<tr><td colspan="4" class="alert alert-danger">Error loading results</td></tr>';
+                });
+        }
+
+        function updateDashboard(data) {
+            // Update timestamp
+            document.getElementById('last-update').textContent = 
+                new Date(data.timestamp * 1000).toLocaleString();
+
+            const tests = data.tests;
+            const total = tests.length;
+            
+            // Calculate statistics
+            const highThreats = tests.filter(t => t.overall_threat).length;
+            const avgScore = tests.reduce((sum, t) => sum + t.threat_score, 0) / total;
+            
+            // Update summary
+            document.getElementById('summary-stats').innerHTML = `
+                <p>Total Videos Tested: <strong>${total}</strong></p>
+                <p>High Threats Detected: <strong style="color: #dc3545;">${highThreats}</strong></p>
+                <p>Average Threat Score: <strong>${avgScore.toFixed(3)}</strong></p>
+                <p style="margin-top: 15px;">
+                    Threat Level: <span class="badge ${highThreats > 0 ? 'badge-danger' : 'badge-success'}">
+                    ${highThreats > 0 ? 'HIGH' : 'LOW'}
+                    </span>
+                </p>
+            `;
+
+            // Update threat level indicator
+            document.getElementById('threat-level').textContent = highThreats > 0 ? 'HIGH' : 'LOW';
+            document.getElementById('threat-level').style.color = highThreats > 0 ? '#dc3545' : '#28a745';
+
+            // Update threat distribution chart
+            const distribution = { low: 0, medium: 0, high: 0, critical: 0 };
+            tests.forEach(t => {
+                if (t.threat_score < 0.3) distribution.low++;
+                else if (t.threat_score < 0.6) distribution.medium++;
+                else if (t.threat_score < 0.8) distribution.high++;
+                else distribution.critical++;
+            });
+
+            threatChart.data.datasets[0].data = [distribution.low, distribution.medium, distribution.high, distribution.critical];
+            threatChart.update();
+
+            // Update attack types chart
+            const attackTypes = {};
+            tests.forEach(t => {
+                const type = t.attack_type;
+                attackTypes[type] = (attackTypes[type] || 0) + 1;
+            });
+
+            attackChart.data.datasets[0].data = Object.values(attackTypes);
+            attackChart.update();
+
+            // Update results table
+            const tableBody = document.getElementById('results-table');
+            tableBody.innerHTML = tests.map(t => `
+                <tr>
+                    <td>${t.video_file}</td>
+                    <td>${t.attack_type}</td>
+                    <td>${t.threat_score.toFixed(3)}</td>
+                    <td><span class="badge ${t.overall_threat ? 'badge-danger' : 'badge-success'}">
+                        ${t.overall_threat ? 'THREAT' : 'SAFE'}
+                    </span></td>
+                </tr>
+            `).join('');
+
+            // Update alerts
+            if (highThreats > 0) {
+                document.getElementById('alerts-container').innerHTML = `
+                    <div class="alert alert-danger">
+                        <strong>ALERT:</strong> ${highThreats} videos detected as high threat!
+                    </div>
+                    <div class="alert alert-warning">
+                        Cross-modal coordination analysis indicates coordinated attack patterns.
+                    </div>
+                `;
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initCharts();
+            loadResults();
+            
+            // Auto-refresh every 30 seconds
+            setInterval(loadResults, 30000);
+        });
+    </script>
+</body>
+</html>

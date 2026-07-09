@@ -1,0 +1,65 @@
+[
+  {
+    "pattern_name": "Circuit Breaker",
+    "test_name": "normal_operation_0",
+    "success": true,
+    "response_time": 0.0,
+    "failure_count": 0,
+    "retry_count": 0,
+    "timestamp": 1783257979.1962821
+  },
+  {
+    "pattern_name": "Circuit Breaker",
+    "test_name": "normal_operation_1",
+    "success": true,
+    "response_time": 0.0,
+    "failure_count": 0,
+    "retry_count": 0,
+    "timestamp": 1783257980.447754
+  },
+  {
+    "pattern_name": "Circuit Breaker",
+    "test_name": "normal_operation_2",
+    "success": true,
+    "response_time": 0.0,
+    "failure_count": 0,
+    "retry_count": 0,
+    "timestamp": 1783257983.482456
+  },
+  {
+    "pattern_name": "Retry with Backoff",
+    "test_name": "flaky_operation",
+    "success": true,
+    "response_time": 0.2531101703643799,
+    "failure_count": 0,
+    "retry_count": 0,
+    "timestamp": 1783257990.2692108
+  },
+  {
+    "pattern_name": "Bulkhead",
+    "test_name": "concurrent_requests",
+    "success": true,
+    "response_time": 0.0,
+    "failure_count": 0,
+    "retry_count": 0,
+    "timestamp": 1783257994.431757
+  },
+  {
+    "pattern_name": "Timeout",
+    "test_name": "slow_operation",
+    "success": false,
+    "response_time": 1.0025379657745361,
+    "failure_count": 1,
+    "retry_count": 0,
+    "timestamp": 1783257995.434505
+  },
+  {
+    "pattern_name": "Fallback",
+    "test_name": "primary_failure",
+    "success": true,
+    "response_time": 9.393692016601562e-05,
+    "failure_count": 0,
+    "retry_count": 0,
+    "timestamp": 1783257995.4346828
+  }
+]

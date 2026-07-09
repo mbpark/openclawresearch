@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  # Main application to test resilience
+  app:
+    build: .
+    container_name: resilience_test_app
+    ports:
+      - "8080:8080"
+    environment:
+      - APP_NAME=resilience_test_app
+      - LOG_LEVEL=INFO
+    restart: unless-stopped
+    networks:
+      - resilience_net
+
+  # Database service for testing data resilience
+  database:
+    image: postgres:15-alpine
+    container_name: resilience_db
+    environment:
+      - POSTGRES_DB=testdb
+      - POSTGRES_USER=testuser
+      - POSTGRES_PASSWORD=testpass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - resilience_net
+
+  # Load balancer for testing failover
+  loadbalancer:
+    image: haproxy:2.8-alpine
+    container_name: resilience_lb
+    ports:
+      - "8081:80"
+    volumes:
+      - ./config/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    networks:
+      - resilience_net
+
+  # Monitoring and observability
+  prometheus:
+    image: prom/prometheus:v2.47.0
+    container_name: resilience_prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    networks:
+      - resilience_net
+
+  grafana:
+    image: grafana/grafana:10.0.0
+    container_name: resilience_grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - resilience_net
+
+networks:
+  resilience_net:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  prometheus_data:
+  grafana_data:
