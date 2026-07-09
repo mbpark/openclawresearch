@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multimodal VLMGuard Dashboard</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #1a1a2e;
+            color: #eee;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #00ff88;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .status-card {
+            background: #16213e;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #0f3460;
+        }
+        .status-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .status-label {
+            color: #888;
+            font-size: 0.9em;
+        }
+        .threat-indicator {
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .threat-low {
+            background: #10b981;
+            color: white;
+        }
+        .threat-medium {
+            background: #f59e0b;
+            color: white;
+        }
+        .threat-high {
+            background: #ef4444;
+            color: white;
+        }
+        .monitoring-section {
+            background: #16213e;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid #0f3460;
+        }
+        .monitoring-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .monitoring-item {
+            background: #0f3460;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+        }
+        .monitoring-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #00ff88;
+        }
+        .monitoring-label {
+            color: #888;
+            font-size: 0.8em;
+            margin-top: 5px;
+        }
+        .recent-alerts {
+            background: #16213e;
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid #0f3460;
+        }
+        .alert-item {
+            background: #0f3460;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border-left: 4px solid #f59e0b;
+        }
+        .alert-time {
+            color: #888;
+            font-size: 0.8em;
+        }
+        .alert-message {
+            font-weight: bold;
+        }
+        .refresh-btn {
+            background: #00ff88;
+            color: #1a1a2e;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 20px 0;
+            width: 100%;
+        }
+        .refresh-btn:hover {
+            background: #00cc6a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛡️ Multimodal VLMGuard Dashboard</h1>
+        
+        <div class="status-grid">
+            <div class="status-card">
+                <div class="status-label">Threat Level</div>
+                <div class="status-value" id="threatLevel">LOW</div>
+                <div class="threat-indicator threat-low" id="threatIndicator">Safe</div>
+            </div>
+            <div class="status-card">
+                <div class="status-label">Images Analyzed</div>
+                <div class="status-value" id="imagesAnalyzed">0</div>
+                <div class="status-label">Total Scans</div>
+            </div>
+            <div class="status-card">
+                <div class="status-label">Threats Blocked</div>
+                <div class="status-value" id="threatsBlocked">0</div>
+                <div class="status-label">Effectiveness</div>
+            </div>
+        </div>
+        
+        <button class="refresh-btn" onclick="refreshDashboard()">🔄 Refresh Dashboard</button>
+        
+        <div class="monitoring-section">
+            <h2>📊 Real-Time Monitoring</h2>
+            <div class="monitoring-grid">
+                <div class="monitoring-item">
+                    <div class="monitoring-value" id="currentThreat">0.0</div>
+                    <div class="monitoring-label">Current Threat Score</div>
+                </div>
+                <div class="monitoring-item">
+                    <div class="monitoring-value" id="samplesProcessed">0</div>
+                    <div class="monitoring-label">Samples Processed</div>
+                </div>
+                <div class="monitoring-item">
+                    <div class="monitoring-value" id="lastScan">Never</div>
+                    <div class="monitoring-label">Last Scan</div>
+                </div>
+                <div class="monitoring-item">
+                    <div class="monitoring-value" id="smoothingStatus">Active</div>
+                    <div class="monitoring-label">Smoothing Engine</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="recent-alerts">
+            <h2>🚨 Recent Alerts</h2>
+            <div id="alertList">
+                <div class="alert-item">
+                    <div class="alert-time">System initialized</div>
+                    <div class="alert-message">VLMGuard monitoring active - waiting for input</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Mock data for dashboard - would integrate with actual VLMGuard backend
+        let dashboardData = {
+            threatLevel: "LOW",
+            imagesAnalyzed: 0,
+            threatsBlocked: 0,
+            currentThreatScore: 0.0,
+            samplesProcessed: 0,
+            lastScan: "Never",
+            alerts: []
+        };
+        
+        function updateDashboard() {
+            // Update threat level display
+            document.getElementById('threatLevel').textContent = dashboardData.threatLevel;
+            
+            // Update indicator
+            const indicator = document.getElementById('threatIndicator');
+            indicator.className = 'threat-indicator';
+            if (dashboardData.threatLevel === "LOW") {
+                indicator.classList.add('threat-low');
+                indicator.textContent = "Safe";
+            } else if (dashboardData.threatLevel === "MEDIUM") {
+                indicator.classList.add('threat-medium');
+                indicator.textContent = "Warning";
+            } else {
+                indicator.classList.add('threat-high');
+                indicator.textContent = "Danger";
+            }
+            
+            // Update statistics
+            document.getElementById('imagesAnalyzed').textContent = dashboardData.imagesAnalyzed;
+            document.getElementById('threatsBlocked').textContent = dashboardData.threatsBlocked;
+            document.getElementById('currentThreat').textContent = dashboardData.currentThreatScore.toFixed(2);
+            document.getElementById('samplesProcessed').textContent = dashboardData.samplesProcessed;
+            
+            // Add alert if needed
+            if (dashboardData.currentThreatScore > 0.7 && dashboardData.threatLevel !== "HIGH") {
+                addAlert("HIGH THREAT DETECTED", "Threat score: " + dashboardData.currentThreatScore.toFixed(2));
+            }
+        }
+        
+        function addAlert(title, message) {
+            const alertList = document.getElementById('alertList');
+            const alertItem = document.createElement('div');
+            alertItem.className = 'alert-item';
+            
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            
+            alertItem.innerHTML = `
+                <div class="alert-time">${timeString}</div>
+                <div class="alert-message">${title}: ${message}</div>
+            `;
+            
+            alertList.insertBefore(alertItem, alertList.firstChild);
+            
+            // Keep only last 10 alerts
+            while (alertList.children.length > 10) {
+                alertList.removeChild(alertList.lastChild);
+            }
+        }
+        
+        function refreshDashboard() {
+            // Simulate dashboard refresh - in production, this would fetch real data
+            const now = new Date();
+            dashboardData.lastScan = now.toLocaleTimeString();
+            
+            // Randomize values slightly to show activity
+            dashboardData.currentThreatScore = Math.random() * 0.4;
+            dashboardData.samplesProcessed += Math.floor(Math.random() * 10) + 1;
+            
+            if (dashboardData.currentThreatScore > 0.3) {
+                dashboardData.imagesAnalyzed += Math.floor(Math.random() * 5) + 1;
+            }
+            
+            updateDashboard();
+            
+            addAlert("Dashboard Refreshed", "Latest scan at " + dashboardData.lastScan);
+        }
+        
+        // Auto-refresh every 30 seconds
+        setInterval(refreshDashboard, 30000);
+        
+        // Initial dashboard load
+        refreshDashboard();
+    </script>
+</body>
+</html>

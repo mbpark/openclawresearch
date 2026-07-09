@@ -1,0 +1,28 @@
+[
+  {
+    "application_name": "resilience_test_app",
+    "resilience_score": 80,
+    "has_circuit_breaker": false,
+    "has_retry_logic": false,
+    "has_fallback": false,
+    "has_timeout": true,
+    "has_monitoring": true,
+    "has_checkpointing": true,
+    "response_time_avg": 0.0018315553665161134,
+    "success_rate": 100.0,
+    "notes": "Score: 80/100, Success rate: 100.0%, Response time: 0.0018s"
+  },
+  {
+    "application_name": "resilience_patterns",
+    "resilience_score": 80,
+    "has_circuit_breaker": true,
+    "has_retry_logic": true,
+    "has_fallback": true,
+    "has_timeout": true,
+    "has_monitoring": true,
+    "has_checkpointing": true,
+    "response_time_avg": 0.001,
+    "success_rate": 100.0,
+    "notes": "Pattern implementation score: 80/100"
+  }
+]

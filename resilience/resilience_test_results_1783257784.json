@@ -1,0 +1,124 @@
+{
+  "timestamp": 1783257784.975222,
+  "metrics": [
+    {
+      "timestamp": 1783257784.975052,
+      "total_requests": 15,
+      "successful_requests": 13,
+      "failed_requests": 2,
+      "success_rate": 86.66666666666667,
+      "avg_response_time": 0.0013811221489539514,
+      "min_response_time": 0.0011169910430908203,
+      "max_response_time": 0.001589059829711914,
+      "median_response_time": 0.0013828277587890625,
+      "std_dev": 0.00012965721883918636
+    }
+  ],
+  "detailed_results": [
+    {
+      "test_name": "create_transaction",
+      "success": false,
+      "response_time": null,
+      "error_message": "__init__() got an unexpected keyword argument 'metadata'",
+      "timestamp": 1783257784.9548101
+    },
+    {
+      "test_name": "create_checkpoint",
+      "success": false,
+      "response_time": null,
+      "error_message": "__init__() got an unexpected keyword argument 'metadata'",
+      "timestamp": 1783257784.9566238
+    },
+    {
+      "test_name": "inject_timeout",
+      "success": true,
+      "response_time": 0.0015590190887451172,
+      "error_message": null,
+      "timestamp": 1783257784.958234
+    },
+    {
+      "test_name": "inject_crash",
+      "success": true,
+      "response_time": 0.0012259483337402344,
+      "error_message": null,
+      "timestamp": 1783257784.959481
+    },
+    {
+      "test_name": "inject_reset",
+      "success": true,
+      "response_time": 0.0011169910430908203,
+      "error_message": null,
+      "timestamp": 1783257784.960623
+    },
+    {
+      "test_name": "load_test_0",
+      "success": true,
+      "response_time": 0.001589059829711914,
+      "error_message": null,
+      "timestamp": 1783257784.962311
+    },
+    {
+      "test_name": "load_test_1",
+      "success": true,
+      "response_time": 0.0013828277587890625,
+      "error_message": null,
+      "timestamp": 1783257784.9637198
+    },
+    {
+      "test_name": "load_test_2",
+      "success": true,
+      "response_time": 0.00139617919921875,
+      "error_message": null,
+      "timestamp": 1783257784.965137
+    },
+    {
+      "test_name": "load_test_3",
+      "success": true,
+      "response_time": 0.001344919204711914,
+      "error_message": null,
+      "timestamp": 1783257784.966503
+    },
+    {
+      "test_name": "load_test_4",
+      "success": true,
+      "response_time": 0.001524209976196289,
+      "error_message": null,
+      "timestamp": 1783257784.968048
+    },
+    {
+      "test_name": "load_test_5",
+      "success": true,
+      "response_time": 0.0014231204986572266,
+      "error_message": null,
+      "timestamp": 1783257784.969494
+    },
+    {
+      "test_name": "load_test_6",
+      "success": true,
+      "response_time": 0.0013887882232666016,
+      "error_message": null,
+      "timestamp": 1783257784.970907
+    },
+    {
+      "test_name": "load_test_7",
+      "success": true,
+      "response_time": 0.0012927055358886719,
+      "error_message": null,
+      "timestamp": 1783257784.9722219
+    },
+    {
+      "test_name": "load_test_8",
+      "success": true,
+      "response_time": 0.0013518333435058594,
+      "error_message": null,
+      "timestamp": 1783257784.9736
+    },
+    {
+      "test_name": "load_test_9",
+      "success": true,
+      "response_time": 0.0013589859008789062,
+      "error_message": null,
+      "timestamp": 1783257784.974983
+    }
+  ]
+}
