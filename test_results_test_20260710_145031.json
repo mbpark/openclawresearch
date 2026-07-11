@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-07-10T14:50:31.592719",
+  "implementation": "test",
+  "status": "error",
+  "crash_detected": false,
+  "signal": null,
+  "memory_violation": false,
+  "response_time_ms": 2,
+  "error_message": "nghttp3-client not found",
+  "logs": [
+    ""
+  ],
+  "payload_size": 260
+}

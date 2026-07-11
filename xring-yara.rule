@@ -1,0 +1,46 @@
+# XRING QPACK Attack Detection Rules
+# YARA Rule for HTTP/3 QPACK encoder stream attacks
+# Created: July 10, 2026
+# Research: XRING Vulnerability Analysis
+
+rule XRingQPackEncoderAttack {
+    meta:
+        description = "Detects XRING QPACK attack pattern"
+        author = "Security Research Team"
+        version = "1.0"
+        reference = "https://github.com/FoxIO-LLC/xring-poc"
+        impact = "Critical buffer overflow vulnerability"
+        confidence = "High"
+    
+    strings:
+        $qpack_set_capacity_64 = { 20 40 }
+        $insert_small = { 40 00 78 00 01 79 }
+        $insert_large = { 40 05 41 41 41 41 41 05 42 42 42 42 42 }
+        $qpack_set_capacity_65 = { 20 41 }
+    
+    condition:
+        // Check for exact sequence
+        $qpack_set_capacity_64 at 0 and
+        ($insert_small at 1 and $insert_small at 2) and
+        ($insert_large at 63) and
+        $qpack_set_capacity_65 at 64 and
+        // Ensure total payload is ~260 bytes
+        size($0) in (256..264)
+}
+
+rule XRingCapacityPattern {
+    meta:
+        description = "Detects XRING capacity change pattern"
+        author = "Security Research Team"
+        version = "1.0"
+    
+    strings:
+        $set_cap_64 = { 20 40 }
+        $set_cap_65 = { 20 41 }
+    
+    condition:
+        $set_cap_64 and
+        $set_cap_65 and
+        // Check that both appear within 100 bytes
+        ($set_cap_64 at +100) or ($set_cap_65 at -100)
+}

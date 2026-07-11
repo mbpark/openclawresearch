@@ -1,0 +1,55 @@
+# XRING QPACK Attack Detection Rules
+# Suricata Rules for HTTP/3 QPACK encoder stream attacks
+# Created: July 10, 2026
+# Research: XRING Vulnerability Analysis
+
+# Rule 1: Detect XRING QPACK encoder stream pattern
+alert http any any -> any 443 (
+    msg:"CRITICAL XRING QPACK Encoder Attack Detected; QPACK instruction sequence suggests buffer overflow exploit";
+    flow:established,to_server;
+    content:"QPACK";
+    pcre:"/0x20[0-9A-Fa-f]{2}0x40/s";
+    content:"0x40|01|78|00|01|79";
+    content:"0x40|05|41|41|41|41|41|05|42|42|42|42|42";
+    dsize:256..264;
+    flowbits:set,xring_qpack_attack,1;
+    sid:1000001;
+    rev:1;
+    severity:1; // Critical
+    priority:1;
+    reference:url,https://github.com/FoxIO-LLC/xring-poc;
+    classification:attempted-admin;
+    tags:
+        network-attack;qpack;
+);
+
+# Rule 2: Detect capacity change sequence (64 -> 65)
+alert http any any -> any 443 (
+    msg:"HIGH XRING Capacity Change Pattern Detected; Suspicious QPACK capacity sequence";
+    flow:established,to_server;
+    content:"QPACK";
+    pcre:"/0x20[0-9A-Fa-f]{2}/";
+    pcre:"/0x20[0-9A-Fa-f]{2}/(>=2)/";
+    dsize:256..264;
+    flowbits:set,xring_capacity_pattern,1;
+    sid:1000002;
+    rev:1;
+    severity:2; // High
+    priority:2;
+    classification:attempted-admin;
+    tags:network-attack;qpack;
+);
+
+# Rule 3: Detect XRING payload size anomaly
+alert http any any -> any 443 (
+    msg:"MEDIUM XRING Payload Size Anomaly; QPACK instruction stream size suggests attack";
+    flow:established,to_server;
+    dsize:256..264;
+    content:"QPACK";
+    sid:1000003;
+    rev:1;
+    severity:3; // Medium
+    priority:3;
+    classification:attempted-admin;
+    tags:network-attack;qpack;
+);

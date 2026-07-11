@@ -1,0 +1,38 @@
+[
+  {
+    "test": "yara_rules",
+    "timestamp": "2026-07-10T13:40:57.341166",
+    "status": "valid",
+    "details": {
+      "rules_count": 2
+    }
+  },
+  {
+    "test": "security_monitor",
+    "timestamp": "2026-07-10T13:40:57.341221",
+    "status": "valid",
+    "details": {
+      "alerts_generated": 1
+    }
+  },
+  {
+    "test": "payload_generation",
+    "timestamp": "2026-07-10T13:40:57.342409",
+    "status": "valid",
+    "details": {
+      "payload_size": 260,
+      "checksum": "0a67c6a8c0760dd6"
+    }
+  },
+  {
+    "test": "workflow_integration",
+    "timestamp": "2026-07-10T13:40:57.342429",
+    "status": "valid",
+    "details": {
+      "alerts_generated": 1,
+      "alert_types": [
+        "xring_workflow_pattern"
+      ]
+    }
+  }
+]
