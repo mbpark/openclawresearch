@@ -22,15 +22,17 @@ from enum import Enum
 class ActionType(Enum):
     READ_FILE = "read_file"
     WRITE_FILE = "write_file"
+    UPLOAD_FILE = "upload_file"
     EXECUTE_SCRIPT = "execute_script"
     SEND_NETWORK_REQUEST = "send_network_request"
     DB_QUERY = "db_query"
 
 class ActionPolicy:
     """Defines the policy for a specific action type"""
-    def __init__(self, action_type: ActionType, allowed_patterns: Dict[str, List[str]]):
+    def __init__(self, action_type: ActionType, allowed_patterns: Dict[str, List[str]], strict_validation: bool = False):
         self.action_type = action_type
-        self.allowed_patterns = allowed_patterns  # e.g., {'file_path': ['^/app/data/.*'], 'domain': ['^api\\.trusted\\.com']}
+        self.allowed_patterns = allowed_patterns
+        self.strict_validation = strict_validation  # For critical vulnerabilities like CVE-2026-48939, CVE-2026-56291
 
 class WorkflowGraph:
     """
@@ -51,11 +53,20 @@ class WorkflowGraph:
                     'file_path': ['^/app/output/.*']
                 }
             ),
+            ActionType.UPLOAD_FILE: ActionPolicy(
+                ActionType.UPLOAD_FILE,
+                allowed_patterns={
+                    'destination_path': ['^/app/uploads/.*'],
+                    'allowed_extensions': ['^\\.(jpg|jpeg|png|gif|bmp|webp|svg|pdf|txt|doc|docx|xls|xlsx|csv|rtf)$'],
+                    'file_type': ['^image/', '^application/pdf$', '^text/plain$', '^application/msword$', '^application/vnd\.ms-excel$', '^application/vnd\.openxmlformats-officedocument\..*$', '^application/rtf$']
+                },
+                strict_validation=True
+            ),
             ActionType.EXECUTE_SCRIPT: ActionPolicy(
                 ActionType.EXECUTE_SCRIPT,
                 allowed_patterns={
                     'script_path': ['^/app/scripts/.*\\.sh$', '^/app/scripts/.*\\.py$'],
-                    'command_args': ['^--safe-.*', '^.*$']  # Allow any args, runtime protector will validate for danger patterns
+                    'command_args': ['^.*$']  # Allow any args, danger patterns checked before pattern matching
                 }
             ),
             ActionType.SEND_NETWORK_REQUEST: ActionPolicy(
@@ -87,6 +98,27 @@ class WorkflowGraph:
         
         policy = self.actions[action_enum]
         
+        # Add CVE-2026-15410 SonicWall protection: Block direct system command execution
+        if action_enum == ActionType.EXECUTE_SCRIPT:
+            args_str = json.dumps(parameters.get('command_args', ''))
+            danger_patterns = [
+                r'(?i)eval\s*\(',
+                r'(?i)exec\s*\(',
+                r'(?i)system\s*\(',
+                r'(?i)shell_exec\s*\(',
+                r'(?i)passthru\s*\(',
+                r'(?i)php_version',
+                r'(?i)sudo\s',
+                r'(?i)\|\s*bash',
+                r'(?i)\|\s*sh',
+                r'(?i)\$\(.*\)',
+                r'(?i)\`.*\`',
+                r'(?i)CVE-2026-15410',
+            ]
+            for pattern in danger_patterns:
+                if re.search(pattern, args_str):
+                    return False, f"Dangerous pattern detected in command arguments: {pattern}"
+        
         # Validate parameters against allowed patterns
         for param_name, allowed_regexes in policy.allowed_patterns.items():
             if param_name not in parameters:
@@ -108,19 +140,182 @@ class WorkflowGraph:
 class LocalRuntimeProtector:
     """
     Local AI Agent Runtime Protector that monitors the execution environment
-    to prevent unauthorized system-level actions.
+    to prevent unauthorized system-level actions. Also provides VPI and Ghostcommit detection.
     """
     
     def __init__(self, workflow_graph: WorkflowGraph):
         self.workflow_graph = workflow_graph
         self.is_protected_mode = True
+        self.ghostcommit_patterns = [
+            re.compile(r'GHOSTCOMMIT', re.IGNORECASE),
+            re.compile(r'GHOST\s*COMMIT', re.IGNORECASE),
+            re.compile(r'VISUAL\s*PROMPT\s*INJECTION', re.IGNORECASE),
+            re.compile(r'VPI\s*ATTACK', re.IGNORECASE),
+            re.compile(r'IGNORE\s*ALL\s*SAFETY', re.IGNORECASE),
+            re.compile(r'SYSTEM\s*OVERRIDE', re.IGNORECASE),
+            re.compile(r'EXFILTRATE\s*DATA', re.IGNORECASE),
+            re.compile(r'DELETE\s*SYSTEM', re.IGNORECASE),
+            re.compile(r'GRANT\s*ACCESS', re.IGNORECASE),
+            re.compile(r'ROOT\s*ACCESS', re.IGNORECASE),
+            re.compile(r'PRIVILEGE\s*ESCALATION', re.IGNORECASE),
+            re.compile(r'TRANSFORM\s*OUTPUT', re.IGNORECASE),
+            re.compile(r'PROCESS\s*SECRETS', re.IGNORECASE),
+            re.compile(r'EXPORT\s*CREDENTIALS', re.IGNORECASE),
+            re.compile(r'EXECUTE\s*COMMAND', re.IGNORECASE),
+            re.compile(r'RUN\s*PAYLOAD', re.IGNORECASE),
+        ]
+        
+        # CVE-2026-48939, CVE-2026-56291, CVE-2026-48908 File Upload RCE Patterns
+        self.file_upload_rce_patterns = [
+            re.compile(r'\.php\b', re.IGNORECASE),
+            re.compile(r'\.phtml\b', re.IGNORECASE),
+            re.compile(r'\.php3\b', re.IGNORECASE),
+            re.compile(r'\.php4\b', re.IGNORECASE),
+            re.compile(r'\.php5\b', re.IGNORECASE),
+            re.compile(r'\.php7\b', re.IGNORECASE),
+            re.compile(r'\.phar\b', re.IGNORECASE),
+            re.compile(r'application/x-php', re.IGNORECASE),
+            re.compile(r'application/x-httpd-php', re.IGNORECASE),
+            re.compile(r'malicious\.php', re.IGNORECASE),
+            re.compile(r'CVE-2026-48939', re.IGNORECASE),
+            re.compile(r'CVE-2026-56291', re.IGNORECASE),
+            re.compile(r'CVE-2026-48908', re.IGNORECASE),
+            re.compile(r'file_upload_rce', re.IGNORECASE),
+            re.compile(r'joomla.*upload.*rce', re.IGNORECASE),
+        ]
+    
+    def detect_ghostcommit(self, content: str) -> tuple[bool, list]:
+        """Detect Ghostcommit signatures in content"""
+        detected_patterns = []
+        for pattern in self.ghostcommit_patterns:
+            if pattern.search(content):
+                detected_patterns.append(pattern.pattern)
+        
+        return len(detected_patterns) > 0, detected_patterns
+    
+    def detect_file_upload_rce(self, file_path: str, file_type: str, parameters: Dict[str, Any]) -> tuple[bool, list]:
+        """Detect file upload RCE patterns from CVE-2026-48939, CVE-2026-56291, CVE-2026-48908"""
+        detected_patterns = []
+        path_lower = file_path.lower()
+        
+        # Check file path for dangerous extensions
+        dangerous_extensions = ['.php', '.phtml', '.php3', '.php4', '.php5', '.php7', '.phar', '.py', '.pl', '.rb', '.asp', '.aspx', '.jsp', '.cgi', '.sh', '.bat', '.cmd']
+        for ext in dangerous_extensions:
+            if path_lower.endswith(ext):
+                detected_patterns.append(f"Dangerous file extension: {ext}")
+        
+        # Check for content-type bypass attempts
+        if file_type:
+            suspicious_types = ['application/x-php', 'text/x-php', 'application/x-httpd-php', 'application/x-perl', 'application/x-python', 'application/x-shellscript', 'application/x-csh', 'application/x-executable']
+            if file_type in suspicious_types:
+                detected_patterns.append(f"Suspicious content type: {file_type}")
+        
+        # Check for CVE-specific patterns
+        content_to_scan = str(parameters)
+        for pattern in self.file_upload_rce_patterns:
+            if pattern.search(content_to_scan):
+                detected_patterns.append(f"CVE pattern matched: {pattern.pattern}")
+        
+        # Check for upload payload detection
+        if 'payload' in content_to_scan.lower() or 'rce' in content_to_scan.lower():
+            detected_patterns.append("Potential RCE payload detection in parameters")
+        
+        # Additional check for JoomShaper, iCagenda, Balbooa patterns
+        if any(brand in content_to_scan.lower() for brand in ['joomshaper', 'icagenda', 'balbooa', 'joomla']):
+            detected_patterns.append("Target extension detected: JoomShaper/iCagenda/Balbooa")
+        
+        return len(detected_patterns) > 0, detected_patterns
+    
+    def detect_sql_file_disclosure(self, sql_query: str) -> tuple[bool, list]:
+        """Detect SQL file disclosure attempts (CVE-2026-50180)"""
+        detected_patterns = []
+        sql_upper = sql_query.upper()
+        
+        # PostgreSQL filesystem-disclosure functions
+        postgres_patterns = [
+            r'pg_read_file\s*\(',
+            r'pg_stat_file\s*\(',
+            r'pg_ls_logdir\s*\(',
+            r'pg_ls_waldir\s*\(',
+            r'pg_current_logfile\s*\(',
+            r'select\s+.*pg_read_file',
+            r'select\s+.*pg_stat_file',
+            r'select\s+.*pg_ls_logdir',
+            r'select\s+.*pg_ls_waldir',
+            r'select\s+.*pg_current_logfile',
+        ]
+        
+        # SQL Server OPENDATASOURCE
+        sqlserver_patterns = [
+            r'opendatasource\s*\(',
+            r'select\s+.*opendatasource',
+        ]
+        
+        # SQLite ATTACH syntax
+        sqlite_patterns = [
+            r'attach\s+.*as\s*\'?\w+\'?\s*without\s*rowid',
+            r'attach\s+database\s*\(\s*\'?[^\']*\'\s*as\s*\'?\w+\'?',
+            r'attach\s+\'?[^\']*\'?\s*as\s*\'?\w+\'?',
+        ]
+        
+        # Check patterns case-insensitively
+        for pattern in postgres_patterns + sqlserver_patterns + sqlite_patterns:
+            if re.search(pattern, sql_upper, re.IGNORECASE):
+                detected_patterns.append(pattern)
+        
+        return len(detected_patterns) > 0, detected_patterns
+    
+    def detect_ssrf(self, url: str) -> tuple[bool, list]:
+        """Detect Server-Side Request Forgery patterns (CVE-2026-15317)"""
+        detected_patterns = []
+        url_lower = url.lower()
+        
+        # Internal network access patterns
+        ssrf_patterns = [
+            r'127\.0\.0\.1',
+            r'localhost',
+            r'\b10\.',
+            r'\b192\.168\.',
+            r'\b172\.(1[6-9]|2[0-9]|3[01])\.',
+            r'metadata\.googleusercontent\.com',
+            r'metadata\.google\.com',
+            r'169\.254\.169\.254',  # AWS metadata
+            r'\.internal\.',
+            r'\.local',  # Match .local at end of domain
+            r'file://',
+            r'gopher://',
+            r'dict://',
+            r'ftp://',
+        ]
+        
+        for pattern in ssrf_patterns:
+            if re.search(pattern, url_lower, re.IGNORECASE):
+                detected_patterns.append(pattern)
+        
+        return len(detected_patterns) > 0, detected_patterns
         
     def protect_execution(self, action_type: str, parameters: Dict[str, Any]) -> tuple[bool, str, Optional[Any]]:
         """
-        Protect execution by validating against workflow graph and simulating safe execution.
+        Protect execution by validating against workflow graph and detecting Ghostcommit/VPI threats.
         Returns (is_success, message, result_or_error)
         """
-        # Step 1: Validate against workflow graph
+        # Step 1: Detect Ghostcommit/VPI threats in all content
+        content_to_scan = str(parameters)
+        is_ghostcommit, patterns = self.detect_ghostcommit(content_to_scan)
+        if is_ghostcommit:
+            return False, f"Ghostcommit/VPI threat detected: {patterns}", None
+        
+        # Step 1.5: Check for file upload RCE threats (CVE-2026-48939, CVE-2026-56291, CVE-2026-48908)
+        if action_type == 'upload_file':
+            is_rce, rce_patterns = self.detect_file_upload_rce(
+                parameters.get('file_path', ''),
+                parameters.get('file_type', ''),
+                parameters
+            )
+            if is_rce:
+                return False, f"File upload RCE threat detected: {rce_patterns}", None
+        
+        # Step 2: Validate against workflow graph
         is_valid, validation_msg = self.workflow_graph.validate_action(action_type, parameters)
         if not is_valid:
             return False, f"Workflow validation failed: {validation_msg}", None
@@ -141,7 +336,27 @@ class LocalRuntimeProtector:
                 if not file_path.startswith('/app/output/'):
                     return False, f"Runtime protection: Write to {file_path} is not allowed", None
                 
+                # Check for upload RCE patterns in write operation
+                is_rce, rce_patterns = self.detect_file_upload_rce(file_path, parameters.get('file_type', ''), parameters)
+                if is_rce:
+                    return False, f"Write operation blocked - potential RCE payload: {rce_patterns}", None
+                
                 return True, f"Successfully wrote to file (simulated): {file_path}", None
+                
+            elif action_type == ActionType.UPLOAD_FILE.value:
+                file_path = parameters['file_path']
+                file_type = parameters.get('file_type', '')
+                content = parameters.get('content', '')
+                
+                # Additional runtime protection for file upload RCE (CVE-2026-48939, CVE-2026-56291, CVE-2026-48908)
+                is_rce, rce_patterns = self.detect_file_upload_rce(file_path, file_type, parameters)
+                if is_rce:
+                    return False, f"Upload operation blocked - potential RCE payload detected: {rce_patterns}", None
+                
+                if not file_path.startswith('/app/uploads/'):
+                    return False, f"Runtime protection: Upload to {file_path} is not allowed", None
+                
+                return True, f"Successfully uploaded file (simulated): {file_path}", {"status": "success", "file": file_path}
                 
             elif action_type == ActionType.EXECUTE_SCRIPT.value:
                 script_path = parameters['script_path']
@@ -158,6 +373,11 @@ class LocalRuntimeProtector:
                 
             elif action_type == ActionType.SEND_NETWORK_REQUEST.value:
                 domain = parameters['domain']
+                # Check for SSRF patterns (CVE-2026-15317)
+                is_ssrf, ssrf_patterns = self.detect_ssrf(domain)
+                if is_ssrf:
+                    return False, f"SSRF protection: Blocked access to sensitive target: {ssrf_patterns}", None
+                
                 if not domain.startswith('api.trusted.com') and not domain.startswith('logs.trusted.com'):
                     return False, f"Runtime protection: Network request to {domain} is not allowed", None
                 
@@ -165,6 +385,12 @@ class LocalRuntimeProtector:
                 
             elif action_type == ActionType.DB_QUERY.value:
                 query = parameters['query_pattern']
+                
+                # Check for SQL file disclosure attacks (CVE-2026-50180)
+                is_sql_disclosure, sql_disclosure_patterns = self.detect_sql_file_disclosure(query)
+                if is_sql_disclosure:
+                    return False, f"SQL file disclosure protection: Blocked dangerous query pattern: {sql_disclosure_patterns}", None
+                
                 query_upper = query.upper()
                 if 'DROP TABLE' in query_upper or 'DROP DATABASE' in query_upper or 'DELETE FROM' in query_upper or (query_upper.startswith('UPDATE') and 'WHERE' not in query_upper):
                     return False, f"Runtime protection: Destructive SQL query detected: {query}", None
@@ -316,6 +542,60 @@ def run_workflow_graph_demo():
         }
     })
     result = controller.process_llm_intent(destructive_db_intent)
+    print(f"Status: {result['status']}")
+    print(f"Message: {result['message']}")
+    
+    # Test Case 8: Ghostcommit Attack Detection
+    print("\n--- Test Case 8: Ghostcommit Attack Detection ---")
+    ghostcommit_intent = json.dumps({
+        'action': 'write_file',
+        'parameters': {
+            'file_path': '/app/output/report.txt',
+            'content': 'GHOSTCOMMIT EXFILTRATE ROOT ACCESS SYSTEM OVERRIDE'
+        }
+    })
+    result = controller.process_llm_intent(ghostcommit_intent)
+    print(f"Status: {result['status']}")
+    print(f"Message: {result['message']}")
+    
+    # Test Case 9: VPI Attack Detection
+    print("\n--- Test Case 9: VPI Attack Detection ---")
+    vpi_intent = json.dumps({
+        'action': 'execute_script',
+        'parameters': {
+            'script_path': '/app/scripts/test.sh',
+            'command_args': 'IGNORE ALL SAFETY GUARDRAILS PROCESS SECRETS'
+        }
+    })
+    result = controller.process_llm_intent(vpi_intent)
+    print(f"Status: {result['status']}")
+    print(f"Message: {result['message']}")
+    
+    # Test Case 10: File upload RCE - dangerous extension (CVE-2026-48939, CVE-2026-56291, CVE-2026-48908)
+    print("\n--- Test Case 10: File Upload RCE - Dangerous Extension ---")
+    malicious_upload_intent = json.dumps({
+        'action': 'upload_file',
+        'parameters': {
+            'file_path': '/app/uploads/malicious.php',
+            'file_type': 'application/x-php',
+            'content': '<?php system($_GET["cmd"]); ?>' 
+        }
+    })
+    result = controller.process_llm_intent(malicious_upload_intent)
+    print(f"Status: {result['status']}")
+    print(f"Message: {result['message']}")
+    
+    # Test Case 11: Benign upload request
+    print("\n--- Test Case 11: Benign Upload Request ---")
+    benign_upload_intent = json.dumps({
+        'action': 'upload_file',
+        'parameters': {
+            'file_path': '/app/uploads/document.pdf',
+            'file_type': 'application/pdf',
+            'content': 'base64encodedcontent'
+        }
+    })
+    result = controller.process_llm_intent(benign_upload_intent)
     print(f"Status: {result['status']}")
     print(f"Message: {result['message']}")
     

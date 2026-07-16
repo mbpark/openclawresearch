@@ -1,0 +1,25 @@
+{
+  "timestamp": "2026-07-15T14:46:55.453345+00:00",
+  "threat_sources": [],
+  "summary": {
+    "total_bgp_events": 1787,
+    "matched_threats": 0,
+    "high_risk_events": 0,
+    "unique_malicious_asns_seen": 0,
+    "unique_malicious_prefixes_seen": 0
+  },
+  "high_risk_events": [],
+  "threat_intelligence": {
+    "cymru_feed": {
+      "available": false,
+      "malicious_asns_count": 0,
+      "malicious_prefixes_count": 0
+    },
+    "alphamountain_feed": {
+      "available": true,
+      "malicious_domains_count": 1000
+    },
+    "asns_seen_in_bgp": [],
+    "prefixes_seen_in_bgp": []
+  }
+}

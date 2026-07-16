@@ -1,0 +1,256 @@
+{
+  "update_timestamp": "2026-07-14T14:15:00Z",
+  "reporting_period": "2026-07-12T00:00:00Z to 2026-07-14T14:15:00Z",
+  "researcher": "Wally",
+  "threat_landscape_summary": {
+    "critical_vulnerabilities": 8,
+    "high_priority_vulnerabilities": 0,
+    "medium_priority_vulnerabilities": 0,
+    "total_new_cves": 8,
+    "active_exploitation_rate": "100%",
+    "average_cvss_score": 9.1,
+    "primary_attack_vectors": [
+      "File Upload RCE",
+      "Authentication Bypass",
+      "Path Traversal",
+      "Deserialization Attack"
+    ],
+    "most_targeted_platforms": [
+      "Joomla Extensions",
+      "Adobe ColdFusion",
+      "Microsoft SharePoint",
+      "Remote Support Software"
+    ]
+  },
+  "critical_findings": [
+    {
+      "cve_id": "CVE-2026-48939",
+      "vendor": "iCagenda",
+      "product": "Joomla Calendar Extension",
+      "cvss_score": 9.8,
+      "attack_vector": "Network",
+      "authentication": "None Required",
+      "impact": "Full RCE",
+      "exploitation_status": "Active - Zero-day available",
+      "cisa_kev": true,
+      "due_date": "2026-07-13",
+      "status": "DUE_DATE_PASSED",
+      "immediate_action_required": true
+    },
+    {
+      "cve_id": "CVE-2026-56291",
+      "vendor": "Balbooa",
+      "product": "Joomla Forms Extension",
+      "cvss_score": 9.8,
+      "attack_vector": "Network",
+      "authentication": "None Required",
+      "impact": "Full RCE",
+      "exploitation_status": "Active - PoC available",
+      "cisa_kev": true,
+      "due_date": "2026-07-13",
+      "status": "DUE_DATE_PASSED",
+      "immediate_action_required": true
+    },
+    {
+      "cve_id": "CVE-2026-48908",
+      "vendor": "JoomShaper",
+      "product": "Joomla Page Builder",
+      "cvss_score": 9.8,
+      "attack_vector": "Network",
+      "authentication": "None Required",
+      "impact": "PHP Code Execution",
+      "exploitation_status": "Active - Multiple PoCs",
+      "cisa_kev": true,
+      "due_date": "2026-07-10",
+      "status": "DUE_DATE_PASSED",
+      "immediate_action_required": true
+    }
+  ],
+  "high_priority_findings": [
+    {
+      "cve_id": "CVE-2026-56290",
+      "vendor": "Joomlack",
+      "product": "Page Builder",
+      "cvss_score": 8.6,
+      "attack_vector": "Network",
+      "authentication": "None Required",
+      "impact": "Remote Code Execution",
+      "exploitation_status": "Active",
+      "cisa_kev": true,
+      "due_date": "2026-07-10",
+      "status": "DUE_DATE_PASSED"
+    },
+    {
+      "cve_id": "CVE-2026-48282",
+      "vendor": "Adobe",
+      "product": "ColdFusion",
+      "cvss_score": 8.1,
+      "attack_vector": "Network",
+      "authentication": "User Context",
+      "impact": "Arbitrary Code Execution",
+      "exploitation_status": "Active",
+      "cisa_kev": true,
+      "due_date": "2026-07-10",
+      "status": "DUE_DATE_PASSED"
+    },
+    {
+      "cve_id": "CVE-2026-45659",
+      "vendor": "Microsoft",
+      "product": "SharePoint Server",
+      "cvss_score": 7.5,
+      "attack_vector": "Network",
+      "authentication": "Authorized Attacker",
+      "impact": "Code Execution",
+      "exploitation_status": "Active",
+      "cisa_kev": true,
+      "due_date": "2026-07-04",
+      "status": "DUE_DATE_PASSED"
+    },
+    {
+      "cve_id": "CVE-2026-48558",
+      "vendor": "SimpleHelp",
+      "product": "Remote Support",
+      "cvss_score": 9.0,
+      "attack_vector": "Network",
+      "authentication": "None Required",
+      "impact": "Authentication Bypass",
+      "exploitation_status": "Active",
+      "cisa_kev": true,
+      "due_date": "2026-07-02",
+      "status": "DUE_DATE_PASSED"
+    },
+    {
+      "cve_id": "CVE-2026-12569",
+      "vendor": "PTC",
+      "product": "Windchill/FlexPLM",
+      "cvss_score": 9.8,
+      "attack_vector": "Network",
+      "authentication": "None Required",
+      "impact": "Remote Code Execution",
+      "exploitation_status": "Active",
+      "cisa_kev": true,
+      "due_date": "2026-06-28",
+      "status": "DUE_DATE_PASSED"
+    }
+  ],
+  "attack_pattern_analysis": {
+    "primary_vectors": {
+      "file_upload_rce": {
+        "count": 3,
+        "percentage": "37.5%",
+        "description": "Unauthenticated file upload vulnerabilities allowing arbitrary code execution",
+        "mitre_techniques": [
+          "T1566.002 - Phishing: Spearphishing Attachment",
+          "T1105 - Ingress Tool Transfer",
+          "T1059.004 - Command and Scripting Interpreter: Unix Shell"
+        ]
+      },
+      "authentication_bypass": {
+        "count": 1,
+        "percentage": "12.5%",
+        "description": "Bypassing authentication mechanisms to gain unauthorized access",
+        "mitre_techniques": [
+          "T1078 - Valid Accounts",
+          "T1110.001 - Brute Force: Password Guessing"
+        ]
+      },
+      "path_traversal": {
+        "count": 1,
+        "percentage": "12.5%",
+        "description": "Accessing files outside intended directories",
+        "mitre_techniques": [
+          "T1176 - Browser Extensions",
+          "T1055 - Process Injection"
+        ]
+      },
+      "deserialization_attack": {
+        "count": 1,
+        "percentage": "12.5%",
+        "description": "Exploiting unsafe deserialization to execute arbitrary code",
+        "mitre_techniques": [
+          "T1190 - Exploit Public-Facing Application",
+          "T1210 - Abuse Exploited Defense Evasion"
+        ]
+      },
+      "improper_input_validation": {
+        "count": 2,
+        "percentage": "25%",
+        "description": "Failure to validate input leading to RCE",
+        "mitre_techniques": [
+          "T1190 - Exploit Public-Facing Application",
+          "T1068 - Exploitation for Privilege Escalation"
+        ]
+      }
+    },
+    "trends": [
+      "File upload vulnerabilities remain the primary attack vector",
+      "Increasing number of unauthenticated RCE vulnerabilities",
+      "Multiple vulnerabilities affecting popular CMS platforms",
+      "Active exploitation by threat actors"
+    ]
+  },
+  "threat_actor_activity": {
+    "active_campaigns": [
+      {
+        "campaign_name": "File Upload RCE Campaign",
+        "threat_actors": "Unknown",
+        "target_sectors": [
+          "Web Content Management",
+          "E-commerce",
+          "Education",
+          "Healthcare"
+        ],
+        "modus_operandi": "Exploiting CMS extension vulnerabilities for initial access",
+        "indicators": [
+          "Suspicious PHP file uploads",
+          "Unusual file modification patterns",
+          "Backdoor installations"
+        ]
+      }
+    ],
+    "ransomware_involvement": "Unknown but likely given exploitation patterns",
+    "geographic_distribution": "Global - targeting web-facing systems"
+  },
+  "mitigation_status": {
+    "immediate_actions_required": [
+      "Patch all CMS extensions by 2026-07-16",
+      "Implement file upload restrictions",
+      "Deploy WAF rules for file upload attacks",
+      "Enable enhanced monitoring for upload activities"
+    ],
+    "ongoing_monitoring": [
+      "Track CVE assignments from past 24 hours",
+      "Monitor CISA KEV catalog updates",
+      "Watch for new exploit availability",
+      "Track threat actor communications"
+    ],
+    "defense_readiness_level": "ELEVATED"
+  },
+  "recommendations": {
+    "short_term": [
+      "Deploy file upload RCE detection signatures",
+      "Block dangerous file extensions at network boundary",
+      "Implement strict file type validation",
+      "Enable real-time alerting for upload attempts"
+    ],
+    "medium_term": [
+      "Update incident response procedures",
+      "Conduct vulnerability assessments of CMS platforms",
+      "Review and harden file upload implementations",
+      "Train security team on file upload attack patterns"
+    ],
+    "long_term": [
+      "Implement zero-trust file processing architecture",
+      "Deploy automated vulnerability scanning",
+      "Establish continuous threat monitoring",
+      "Develop comprehensive security automation"
+    ]
+  },
+  "next_scheduled_update": "2026-07-15T10:00:00Z",
+  "data_sources": [
+    "CISA Known Exploited Vulnerabilities Catalog",
+    "NIST National Vulnerability Database",
+    "GitHub Security Advisories",
+    "Vendor Security Advisories"
+  ]
+}

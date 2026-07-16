@@ -1,0 +1,29 @@
+{
+  "monitoring": {
+    "enabled": true,
+    "check_interval_minutes": 30,
+    "retention_days": 30
+  },
+  "api": {
+    "base_url": "https://stat.ripe.net/",
+    "timeout_seconds": 30,
+    "rate_limit_per_hour": 100
+  },
+  "alerts": {
+    "enabled": true,
+    "threshold_risk": "MEDIUM",
+    "notify_channels": ["local_log", "dashboard"],
+    "critical_threshold": 70
+  },
+  "integration": {
+    "workflow_graph": true,
+    "vpi_detector": false,
+    "siem_export": true,
+    "github_tracking": false
+  },
+  "paths": {
+    "monitoring_data": "research/bgp_monitoring/monitoring_data",
+    "reports": "research/bgp_monitoring/reports",
+    "logs": "research/bgp_monitoring/logs"
+  }
+}

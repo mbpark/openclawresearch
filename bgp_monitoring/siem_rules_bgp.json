@@ -1,0 +1,183 @@
+{
+  "siem_rules": {
+    "description": "BGP Hijack Detection Rules for SIEM Integration",
+    "version": "1.0",
+    "date": "2026-07-14",
+    "rules": [
+      {
+        "id": "BGP-HIJACK-001",
+        "name": "BGP Prefix Hijack Detected",
+        "description": "Detects when a BGP prefix is announced by an unexpected AS",
+        "severity": "high",
+        "enabled": true,
+        "query": "event.type: \"bgp_hijack\" AND NOT analyst_generated: true",
+        "mitre_attack": {
+          "technique": "T1595",
+          "subtechnique": "T1595.001",
+          "description": "Active Scanning: Scanning IP Blocks"
+        },
+        "remediation": [
+          "Contact upstream ISP immediately",
+          "Verify AS path legitimacy",
+          "Implement RPKI validation"
+        ]
+      },
+      {
+        "id": "BGP-HIJACK-002",
+        "name": "Critical BGP Hijack Event",
+        "description": "Detects high-severity BGP hijack events affecting critical infrastructure",
+        "severity": "critical",
+        "enabled": true,
+        "query": "event.type: \"bgp_hijack\" AND risk_level: \"CRITICAL\"",
+        "mitre_attack": {
+          "technique": "T1595",
+          "subtechnique": "T1595.001",
+          "description": "Active Scanning: Scanning IP Blocks"
+        },
+        "remediation": [
+          "Immediate escalation to security operations center",
+          "Contact affected networks directly",
+          "Activate incident response procedures"
+        ]
+      },
+      {
+        "id": "BGP-LEAK-001",
+        "name": "BGP Prefix Leak Detected",
+        "description": "Detects BGP route leaks where prefixes are announced to unauthorized neighbors",
+        "severity": "medium",
+        "enabled": true,
+        "query": "event.type: \"prefix_leak\" AND severity: \"high\"",
+        "mitre_attack": {
+          "technique": "T1595",
+          "subtechnique": "T1595.002",
+          "description": "Active Scanning: Scanning Ports"
+        },
+        "remediation": [
+          "Review BGP configuration",
+          "Implement route filtering",
+          "Update peer configurations"
+        ]
+      },
+      {
+        "id": "BGP-FLAP-001",
+        "name": "BGP Route Flap Detected",
+        "description": "Detects unstable BGP route announcements (route flapping)",
+        "severity": "low",
+        "enabled": true,
+        "query": "event.type: \"route_flap\" AND count > 5 AND window: \"1m\"",
+        "mitre_attack": {
+          "technique": "T1595",
+          "subtechnique": "T1595.003",
+          "description": "Active Scanning: Vulnerability Scanning"
+        },
+        "remediation": [
+          "Investigate route instability",
+          "Check neighbor configurations",
+          "Review BGP timers and policies"
+        ]
+      },
+      {
+        "id": "BGP-SHUTDOWN-001",
+        "name": "BGP Session Shutdown",
+        "description": "Detects unexpected BGP session shutdowns",
+        "severity": "medium",
+        "enabled": true,
+        "query": "event.type: \"bgp_session\" AND action: \"shutdown\" AND unexpected: true",
+        "mitre_attack": {
+          "technique": "T1071",
+          "subtechnique": "T1071.001",
+          "description": "Application Layer Protocol: Web Protocols"
+        },
+        "remediation": [
+          "Verify BGP peer connectivity",
+          "Check for configuration changes",
+          "Review security logs"
+        ]
+      },
+      {
+        "id": "BGP-AS-PATRIOT-001",
+        "name": "AS Number Manipulation Detected",
+        "description": "Detects AS path manipulation or AS number spoofing",
+        "severity": "high",
+        "enabled": true,
+        "query": "event.type: \"as_manipulation\" OR as_path contains \"AS0\" OR as_path contains \"AS23456\"",
+        "mitre_attack": {
+          "technique": "T1564",
+          "subtechnique": "T1564.001",
+          "description": "Hide Artifacts: Run-Time Obfuscation"
+        },
+        "remediation": [
+          "Block routing updates from suspicious ASNs",
+          "Implement BGPsec if available",
+          "Contact upstream providers"
+        ]
+      }
+    ],
+    "elastic_search_rules": [
+      {
+        "name": "BGP Hijack Dashboard",
+        "description": "Elasticsearch dashboard for BGP monitoring",
+        "visualization": {
+          "title": "BGP Security Monitor",
+          "type": "dashboard",
+          "panels": [
+            {
+              "title": "Hijack Events Over Time",
+              "type": "line",
+              "query": "event.type: \"bgp_hijack\"",
+              "time_field": "@timestamp"
+            },
+            {
+              "title": "Severity Distribution",
+              "type": "pie",
+              "query": "event.type: \"bgp_hijack\"",
+              "field": "severity"
+            },
+            {
+              "title": "Affected Prefixes",
+              "type": "table",
+              "query": "event.type: \"bgp_hijack\" AND prefix != null",
+              "fields": ["prefix", "origin_as", "severity", "@timestamp"]
+            }
+          ]
+        }
+      }
+    ],
+    "suricata_rules": [
+      {
+        "name": "BGP Hijack Alert",
+        "sid": 1000001,
+        "description": "BGP Hijack detected",
+        "flow": "to_server",
+        "protocol": "tcp",
+        "content": "BGP_HIJACK",
+        "priority": 1,
+        "classification": "attempted-recon"
+      },
+      {
+        "name": "BGP Route Leak",
+        "sid": 1000002,
+        "description": "BGP route leak detected",
+        "flow": "to_server",
+        "protocol": "tcp",
+        "content": "BGP_LEAK",
+        "priority": 2,
+        "classification": "policy-reason"
+      }
+    ],
+    "snort_rules": [
+      {
+        "name": "BGP Security Alert",
+        "sid": 2000001,
+        "description": "BGP security event",
+        "type": "alert",
+        "protocol": "tcp",
+        "source": "any",
+        "destination": "any",
+        "content": "BGP_SECURITY",
+        "msg": "BGP Security Event Detected",
+        "priority": 1
+      }
+    ]
+  }
+}

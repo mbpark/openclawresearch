@@ -1,0 +1,184 @@
+{
+  "timestamp": "2026-07-14T20:09:54.835198+00:00",
+  "total_hijacks": 3,
+  "hijacks_by_risk": {
+    "CRITICAL": [],
+    "HIGH": [
+      {
+        "timestamp": "2026-07-14T20:09:54.834464+00:00",
+        "destination": "RIPE NCC",
+        "origin": "AS12345",
+        "prefix": "203.0.113.0/24",
+        "details": {
+          "legit_owner": "AS12345",
+          "expected_origin": "AS65432",
+          "detection_method": "community_bgpmon",
+          "severity": "high"
+        },
+        "analyst_generated": false,
+        "status": "ongoing",
+        "analysis": {
+          "risk_score": 50,
+          "risk_level": "HIGH",
+          "risk_factors": [
+            "ongoing_hijack",
+            "high_severity"
+          ]
+        }
+      }
+    ],
+    "MEDIUM": [],
+    "LOW": [
+      {
+        "timestamp": 1784056194.835117,
+        "destination": "ARIN",
+        "origin": "AS99999",
+        "prefix": "198.51.100.0/16",
+        "details": {
+          "legit_owner": "AS11111",
+          "expected_origin": "AS11111",
+          "detection_method": "manual",
+          "severity": "medium"
+        },
+        "analyst_generated": true,
+        "status": "resolved",
+        "analysis": {
+          "risk_score": 25,
+          "risk_level": "LOW",
+          "risk_factors": [
+            "analyst_confirmed",
+            "resolved",
+            "medium_severity"
+          ]
+        }
+      }
+    ],
+    "MINIMAL": [
+      {
+        "timestamp": 1784052594.835128,
+        "destination": "LACNIC",
+        "origin": "AS55555",
+        "prefix": "192.0.2.0/24",
+        "details": {
+          "legit_owner": "AS22222",
+          "expected_origin": "AS22222",
+          "detection_method": "community_bgpmon",
+          "severity": "low"
+        },
+        "analyst_generated": false,
+        "status": "resolved",
+        "analysis": {
+          "risk_score": -20,
+          "risk_level": "MINIMAL",
+          "risk_factors": [
+            "resolved"
+          ]
+        }
+      }
+    ]
+  },
+  "hijacks_by_status": {
+    "ongoing": [
+      {
+        "timestamp": "2026-07-14T20:09:54.834464+00:00",
+        "destination": "RIPE NCC",
+        "origin": "AS12345",
+        "prefix": "203.0.113.0/24",
+        "details": {
+          "legit_owner": "AS12345",
+          "expected_origin": "AS65432",
+          "detection_method": "community_bgpmon",
+          "severity": "high"
+        },
+        "analyst_generated": false,
+        "status": "ongoing",
+        "analysis": {
+          "risk_score": 50,
+          "risk_level": "HIGH",
+          "risk_factors": [
+            "ongoing_hijack",
+            "high_severity"
+          ]
+        }
+      }
+    ],
+    "resolved": [
+      {
+        "timestamp": 1784056194.835117,
+        "destination": "ARIN",
+        "origin": "AS99999",
+        "prefix": "198.51.100.0/16",
+        "details": {
+          "legit_owner": "AS11111",
+          "expected_origin": "AS11111",
+          "detection_method": "manual",
+          "severity": "medium"
+        },
+        "analyst_generated": true,
+        "status": "resolved",
+        "analysis": {
+          "risk_score": 25,
+          "risk_level": "LOW",
+          "risk_factors": [
+            "analyst_confirmed",
+            "resolved",
+            "medium_severity"
+          ]
+        }
+      },
+      {
+        "timestamp": 1784052594.835128,
+        "destination": "LACNIC",
+        "origin": "AS55555",
+        "prefix": "192.0.2.0/24",
+        "details": {
+          "legit_owner": "AS22222",
+          "expected_origin": "AS22222",
+          "detection_method": "community_bgpmon",
+          "severity": "low"
+        },
+        "analyst_generated": false,
+        "status": "resolved",
+        "analysis": {
+          "risk_score": -20,
+          "risk_level": "MINIMAL",
+          "risk_factors": [
+            "resolved"
+          ]
+        }
+      }
+    ]
+  },
+  "analysis": [
+    {
+      "prefix": "203.0.113.0/24",
+      "origin": "AS12345",
+      "risk_level": "HIGH",
+      "risk_score": 50,
+      "factors": [
+        "ongoing_hijack",
+        "high_severity"
+      ]
+    },
+    {
+      "prefix": "198.51.100.0/16",
+      "origin": "AS99999",
+      "risk_level": "LOW",
+      "risk_score": 25,
+      "factors": [
+        "analyst_confirmed",
+        "resolved",
+        "medium_severity"
+      ]
+    },
+    {
+      "prefix": "192.0.2.0/24",
+      "origin": "AS55555",
+      "risk_level": "MINIMAL",
+      "risk_score": -20,
+      "factors": [
+        "resolved"
+      ]
+    }
+  ]
+}

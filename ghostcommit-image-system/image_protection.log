@@ -1,0 +1,13 @@
+2026-07-12 12:24:00,161 - image_protection_service - INFO - ✅ Image Protection Service initialized
+2026-07-12 12:27:51,075 - image_protection_service - INFO - ✅ Image Protection Service initialized
+2026-07-12 12:28:03,154 - image_protection_service - INFO - ✅ Image Protection Service initialized
+2026-07-12 12:28:18,427 - image_protection_service - ERROR - ❌ Error analyzing /tmp/vpi_white_on_white_login_mockup.png: setting an array element with a sequence. The requested array has an inhomogeneous shape after 1 dimensions. The detected shape was (14,) + inhomogeneous part.
+2026-07-12 12:30:41,178 - image_protection_service - INFO - ✅ Image Protection Service initialized
+2026-07-14 10:34:12,170 - image_protection_service - INFO - ✅ Image Protection Service initialized with file upload monitoring
+2026-07-14 10:34:19,940 - image_protection_service - INFO - ✅ Image Protection Service initialized with file upload monitoring
+2026-07-14 10:34:19,940 - image_protection_service - WARNING - 🚫 File upload blocked: /app/uploads/malicious.php
+2026-07-14 10:34:19,941 - image_protection_service - WARNING -    Threats: Dangerous file extension: .php, Suspicious content type: application/x-php
+2026-07-16 10:05:56,267 - image_protection_service - INFO - ✅ Image Protection Service initialized with 13 dangerous extensions blocked
+2026-07-16 10:05:56,267 - image_protection_service - INFO - 🔍 CVE-specific patterns loaded: 7
+2026-07-16 10:05:56,267 - image_protection_service - WARNING - 🚫 File upload blocked: /app/uploads/malicious.php
+2026-07-16 10:05:56,267 - image_protection_service - WARNING -    Threats: Dangerous file extension: .php, Suspicious content type: application/x-php

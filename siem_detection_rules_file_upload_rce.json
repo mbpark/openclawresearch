@@ -1,0 +1,163 @@
+{
+  "siem_detection_rules": [
+    {
+      "id": "CVE-2026-48939-ICENDAGA-UPLOAD",
+      "name": "iCagenda File Upload RCE Attempt",
+      "description": "Detects upload attempts targeting iCagenda Joomla extension file upload vulnerability (CVE-2026-48939)",
+      "severity": "critical",
+      "mitre_attack": ["T1566.002", "T1105"],
+      "detection_rule": {
+        "elastic": {
+          "query": {
+            "bool": {
+              "must": [
+                {"term": {"file.extension": "php"}},
+                {"term": {"http.request.method": "POST"}},
+                {"path": {"url": "*icagenda*"}},
+                {"term": {"file.size": {"gte": 100, "lte": 10000}}}
+              ]
+            }
+          }
+        },
+        "snort": "alert tcp any any -> any 80 (msg:\"iCagenda File Upload RCE Attempt\"; content:\"icagenda\"; nocase; content:\".php\"; content:\"POST /\"; sid:1000001; rev:1;)",
+        "suricata": "alert http any any -> any any (msg:\"iCagenda File Upload RCE Attempt\"; content:\"icagenda\"; nocase; content:\".php\"; content:\"POST /\"; classtype:attempted-admin; sid:1000001; rev:1;)"
+      },
+      "recommended_response": "Block IP address, isolate affected systems, review logs for successful uploads"
+    },
+    {
+      "id": "CVE-2026-56291-BALBOOA-UPLOAD",
+      "name": "Balbooa Forms File Upload RCE Attempt",
+      "description": "Detects upload attempts targeting Balbooa Forms Joomla extension file upload vulnerability (CVE-2026-56291)",
+      "severity": "critical",
+      "mitre_attack": ["T1195.002", "T1059.004"],
+      "detection_rule": {
+        "elastic": {
+          "query": {
+            "bool": {
+              "must": [
+                {"term": {"file.extension": "php"}},
+                {"term": {"http.request.method": "POST"}},
+                {"path": {"url": "*balbooa*"}},
+                {"term": {"file.size": {"gte": 100, "lte": 10000}}}
+              ]
+            }
+          }
+        },
+        "snort": "alert tcp any any -> any 80 (msg:\"Balbooa Forms File Upload RCE Attempt\"; content:\"balbooa\"; nocase; content:\".php\"; content:\"POST /\"; sid:1000002; rev:1;)",
+        "suricata": "alert http any any -> any 80 (msg:\"Balbooa Forms File Upload RCE Attempt\"; content:\"balbooa\"; nocase; content:\".php\"; content:\"POST /\"; classtype:attempted-admin; sid:1000002; rev:1;)"
+      },
+      "recommended_response": "Block IP address, isolate affected systems, review logs for successful uploads"
+    },
+    {
+      "id": "CVE-2026-48908-JOOMSHAPER-UPLOAD",
+      "name": "JoomShaper SP Page Builder File Upload RCE Attempt",
+      "description": "Detects upload attempts targeting JoomShaper SP Page Builder Joomla extension file upload vulnerability (CVE-2026-48908)",
+      "severity": "critical",
+      "mitre_attack": ["T1566.001", "T1055"],
+      "detection_rule": {
+        "elastic": {
+          "query": {
+            "bool": {
+              "must": [
+                {"term": {"file.extension": "php"}},
+                {"term": {"http.request.method": "POST"}},
+                {"path": {"url": "*joomshaper*"}},
+                {"term": {"file.size": {"gte": 100, "lte": 10000}}}
+              ]
+            }
+          }
+        },
+        "snort": "alert tcp any any -> any 80 (msg:\"JoomShaper File Upload RCE Attempt\"; content:\"joomshaper\"; nocase; content:\".php\"; content:\"POST /\"; sid:1000003; rev:1;)",
+        "suricata": "alert http any any -> any 80 (msg:\"JoomShaper File Upload RCE Attempt\"; content:\"joomshaper\"; nocase; content:\".php\"; content:\"POST /\"; classtype:attempted-admin; sid:1000003; rev:1;)"
+      },
+      "recommended_response": "Block IP address, isolate affected systems, review logs for successful uploads"
+    },
+    {
+      "id": "JOOMLA-EXTENSION-UPLOAD-CVE-2026",
+      "name": "Joomla Extension Upload Attack Pattern",
+      "description": "Generic detection for any Joomla extension file upload vulnerability exploitation attempt (CVE-2026-48939, CVE-2026-56291, CVE-2026-48908)",
+      "severity": "high",
+      "mitre_attack": ["T1566.002", "T1105", "T1195.002"],
+      "detection_rule": {
+        "elastic": {
+          "query": {
+            "bool": {
+              "must": [
+                {"term": {"file.extension": "php"}},
+                {"term": {"http.request.method": "POST"}},
+                {"path": {"url": "*joomla*"}},
+                {"term": {"user_agent": "*php*"}},
+                {"term": {"file.size": {"gte": 50, "lte": 10000}}}
+              ]
+            }
+          }
+        },
+        "snort": "alert tcp any any -> any 80 (msg:\"Joomla Extension File Upload Attack\"; content:\"joomla\"; nocase; content:\".php\"; content:\"POST /\"; sid:1000004; rev:1;)",
+        "suricata": "alert http any any -> any 80 (msg:\"Joomla Extension File Upload Attack\"; content:\"joomla\"; nocase; content:\".php\"; content:\"POST /\"; classtype:attempted-admin; sid:1000004; rev:1;)"
+      },
+      "recommended_response": "Block IP address, patch all Joomla extensions, enable WAF rules"
+    },
+    {
+      "id": "SUSPICIOUS-PHP-UPLOAD-ANY-CMS",
+      "name": "Suspicious PHP File Upload (Any CMS)",
+      "description": "Generic detection for PHP file uploads which may indicate exploitation attempt",
+      "severity": "medium",
+      "mitre_attack": ["T1566.001", "T1105"],
+      "detection_rule": {
+        "elastic": {
+          "query": {
+            "bool": {
+              "must": [
+                {"term": {"file.extension": "php"}},
+                {"term": {"http.request.method": "POST"}},
+                {"term": {"file.size": {"gte": 50, "lte": 10000}}},
+                {"range": {"http.response.status_code": {"gte": 200, "lte": 300}}}
+              ]
+            }
+          }
+        },
+        "snort": "alert tcp any any -> any 80 (msg:\"Suspicious PHP File Upload\"; content:\".php\"; content:\"POST /\"; sid:1000005; rev:1;)",
+        "suricata": "alert http any any -> any 80 (msg:\"Suspicious PHP File Upload\"; content:\".php\"; content:\"POST /\"; classtype:attempted-admin; sid:1000005; rev:1;)"
+      },
+      "recommended_response": "Monitor for patterns, block if confirmed malicious, review upload validation"
+    }
+  ],
+  "waf_rules": [
+    {
+      "id": "waf-001",
+      "name": "Block PHP Upload to Joomla Extensions",
+      "rule": "SecRule REQUEST_URI \"(?i)(icagenda|balbooa|joomshaper).*\\.php\" \"id:900001,phase:2,deny,status:403,msg:'Blocked PHP upload to vulnerable Joomla extension'\"",
+      "description": "Blocks PHP file uploads to known vulnerable Joomla extensions"
+    },
+    {
+      "id": "waf-002",
+      "name": "Block PHP File Extensions in Upload Paths",
+      "rule": "SecRule REQUEST_URI \"(?i)/upload.*\\.php\" \"id:900002,phase:2,deny,status:403,msg:'Blocked PHP upload attempt'\"",
+      "description": "Blocks direct PHP uploads to upload directories"
+    },
+    {
+      "id": "waf-003",
+      "name": "Validate Content-Type for File Uploads",
+      "rule": "SecRule REQUEST_METHOD \"POST\" \"@streq POST\" \"id:900003,phase:2,chain,deny,status:403,msg:'Invalid content type for file upload'\" \"t:lowercase\" \"SecRule REQUEST_HEADERS:Content-Type \"(?i)^(text/|application/x-php|application/x-httpd-php)\" \"@rx .*\" \"t:none\"",
+      "description": "Blocks non-standard content types that could bypass file upload validation"
+    }
+  ],
+  "deployment_instructions": {
+    "elastic": "Deploy rules to Elasticsearch detection rules, enable alerts to SIEM dashboard",
+    "snort": "Add rules to /etc/snort/rules/local.rules and restart Snort service",
+    "suricata": "Add rules to /etc/suricata/rules/local.rules and restart Suricata service",
+    "waf": "Deploy rules to WAF configuration and test with curl against vulnerable endpoints"
+  },
+  "testing_commands": {
+    "test_icagenda": "curl -X POST -F 'file=@malicious.php' http://target/icagenda/upload",
+    "test_balbooa": "curl -X POST -F 'file=@malicious.php' http://target/balbooa/upload",
+    "test_joomshaper": "curl -X POST -F 'file=@malicious.php' http://target/joomshaper/upload"
+  },
+  "monitoring_recommendations": {
+    "log_forwarding": "Forward all web server logs to central SIEM with real-time correlation",
+    "alerting": "Set up PagerDuty/Opsgenie alerts for critical severity detections",
+    "whitelisting": "Implement allowlist for legitimate PHP files in upload directories",
+    "waf_rules": "Deploy WAF rules before deploying to production to catch attacks at edge",
+    "regular_testing": "Test detection rules weekly using controlled payloads"
+  }
+}

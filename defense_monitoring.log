@@ -1,0 +1,9 @@
+2026-07-16 10:26:18,100 - DefenseMonitoring - INFO - Starting defense monitoring loop...
+2026-07-16 10:26:18,103 - DefenseMonitoring - ERROR - Error checking service image-protection: [Errno 2] No such file or directory: 'systemctl'
+2026-07-16 10:26:18,104 - DefenseMonitoring - ERROR - Error checking service snort: [Errno 2] No such file or directory: 'systemctl'
+2026-07-16 10:26:18,106 - DefenseMonitoring - ERROR - Error checking service suricata: [Errno 2] No such file or directory: 'systemctl'
+2026-07-16 10:26:18,107 - DefenseMonitoring - ERROR - Error checking service apache2: [Errno 2] No such file or directory: 'systemctl'
+2026-07-16 10:26:18,109 - DefenseMonitoring - ERROR - Error checking service nginx: [Errno 2] No such file or directory: 'systemctl'
+2026-07-16 10:26:18,109 - DefenseMonitoring - ERROR - WAF rules file not found
+2026-07-16 10:26:18,109 - DefenseMonitoring - WARNING - 🚨 ALERT [CRITICAL]: Defense systems health: degraded
+2026-07-16 10:26:18,109 - DefenseMonitoring - ERROR - Error in monitoring loop: Object of type datetime is not JSON serializable

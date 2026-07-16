@@ -44,12 +44,13 @@ class VPITestCase:
     success_criteria: List[str]
 
 class GeminiVPITestRunner:
-    def __init__(self, api_key: str = None, model: str = "gemini-2.0-flash"):
+    def __init__(self, api_key: str = None, model: str = "gemini-2.5-flash"):
         # Use environment variable or provided API key
         self.api_key = api_key or os.getenv("GOOGLE_API_KEY")
         if not self.api_key:
             raise ValueError("Google API key not provided. Set GOOGLE_API_KEY environment variable.")
         
+        print(f"Initializing Gemini VPI Test Runner with API key: {self.api_key[:15]}...{self.api_key[-4:]}")
         # Configure Gemini API using new google.genai package
         self.client = genai.Client(api_key=self.api_key)
         self.model_name = model
@@ -58,11 +59,34 @@ class GeminiVPITestRunner:
         
     def load_test_cases(self, test_cases_file: str) -> List[VPITestCase]:
         """Load test cases from a JSON file."""
-        with open(test_cases_file, 'r') as f:
+        # Get the absolute path of the current script's directory
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        # Look for the JSON file in the same directory
+        json_path = os.path.join(script_dir, test_cases_file)
+        
+        if not os.path.exists(json_path):
+            raise FileNotFoundError(f"Test cases file not found: {json_path}")
+            
+        with open(json_path, 'r') as f:
             data = json.load(f)
             
         test_cases = []
         for item in data:
+            # Resolve image path - the paths in the JSON are relative to workspace root
+            if 'image_path' in item:
+                image_path = item['image_path']
+                # Check if it's a relative path - if so, it's relative to workspace root
+                if not os.path.isabs(image_path):
+                    # The workspace root is the parent of the parent of the script_dir
+                    # script_dir = .../research/prompt-injection
+                    # workspace_root = .../.openclaw/workspace
+                    workspace_root = os.path.join(script_dir, '..', '..')
+                    workspace_image_path = os.path.join(workspace_root, image_path)
+                    if os.path.exists(workspace_image_path):
+                        image_path = workspace_image_path
+                
+                item['image_path'] = image_path
+                
             test_case = VPITestCase(
                 test_id=item['test_id'],
                 attack_type=VPIAttackType(item['attack_type']),
@@ -92,18 +116,18 @@ class GeminiVPITestRunner:
     
     def load_image_for_gemini(self, image_path: str) -> Any:
         """Load image file for Gemini API."""
-        txt_path = image_path.replace('.png', '.txt') if image_path.endswith('.png') else image_path
-        
+        # First, try the original path
         if os.path.exists(image_path):
-            # Load actual image file
             with open(image_path, 'rb') as f:
                 return f.read()
-        elif os.path.exists(txt_path):
-            # Return text description for simulated images
+        
+        # If original path doesn't exist, check for .txt alternative
+        txt_path = image_path.replace('.png', '.txt').replace('.jpg', '.txt').replace('.jpeg', '.txt').replace('.gif', '.txt').replace('.bmp', '.txt').replace('.webp', '.txt')
+        if os.path.exists(txt_path):
             with open(txt_path, 'r') as f:
                 return f.read()
-        else:
-            raise FileNotFoundError(f"Image file not found: {image_path} or {txt_path}")
+        
+        raise FileNotFoundError(f"Image file not found: {image_path} or {txt_path}")
     
     def evaluate_injection_success(self, model_response: str, test_case: VPITestCase) -> bool:
         """Evaluate if the injection was successful based on success criteria."""
@@ -229,6 +253,13 @@ class GeminiVPITestRunner:
         print(f"Model: {self.model_name}")
         print("="*60)
         
+        # Debug: print paths
+        print("\nDEBUG: Image paths:")
+        for tc in test_cases:
+            exists = os.path.exists(tc.image_path) or os.path.exists(tc.image_path.replace('.png', '.txt'))
+            print(f"  {tc.test_id}: {tc.image_path} -> exists: {exists}")
+        print()
+        
         successful_injections = 0
         total_tests = len(test_cases)
         
@@ -280,13 +311,13 @@ Detailed Results:
         return report
 
 if __name__ == "__main__":
-    # Initialize test runner with Google Gemini API
-    api_key = "AIzaSyAQRWS9tgMutnfTU34LjIGf0P8wbpEe49g"
+    # Initialize test runner with Google Gemini API using VALID API KEY
+    api_key = "Not Here"
     
     runner = GeminiVPITestRunner(api_key=api_key, model="gemini-2.5-flash")
     
-    # Load test cases
-    test_cases_file = "vpi_test_cases_full.json"
+    # Load test cases (use the fixed version with absolute paths)
+    test_cases_file = "vpi_test_cases_fixed.json"
     test_cases = runner.load_test_cases(test_cases_file)
     
     # Run tests

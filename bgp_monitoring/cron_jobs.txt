@@ -1,0 +1,12 @@
+
+# BGP Security Monitoring Automation
+# Generated: 2026-07-14T20:33:26.269082
+
+# Run BGP monitoring every 6 hours
+0 */6 * * * /usr/bin/python3 /Users/mitchparker/.openclaw/workspace/research/bgp_monitoring/bgp_hijack_monitor_v2.py >> /Users/mitchparker/.openclaw/workspace/research/bgp_monitoring/logs/bgp_monitor.log 2>&1
+
+# Run threat intelligence integration daily at 2 AM
+0 2 * * * /usr/bin/python3 /Users/mitchparker/.openclaw/workspace/research/bgp_monitoring/integrate_threat_intel.py >> /Users/mitchparker/.openclaw/workspace/research/bgp_monitoring/logs/threat_intel.log 2>&1
+
+# Generate security dashboard every 6 hours
+0 */6 * * * /usr/bin/python3 /Users/mitchparker/.openclaw/workspace/research/bgp_monitoring/generate_security_dashboard.py >> /Users/mitchparker/.openclaw/workspace/research/bgp_monitoring/logs/dashboard.log 2>&1

@@ -1,0 +1,16 @@
+{
+  "timestamp": "2026-07-14T17:29:49.019227+00:00",
+  "total_hijacks": 0,
+  "hijacks_by_risk": {
+    "CRITICAL": [],
+    "HIGH": [],
+    "MEDIUM": [],
+    "LOW": [],
+    "MINIMAL": []
+  },
+  "hijacks_by_status": {
+    "ongoing": [],
+    "resolved": []
+  },
+  "analysis": []
+}

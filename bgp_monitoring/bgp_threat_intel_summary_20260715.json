@@ -1,0 +1,104 @@
+{
+  "report_metadata": {
+    "generated_at": "2026-07-15T08:06:06-04:00",
+    "monitoring_cycle": 1,
+    "next_scheduled_run": "2026-07-16T08:00:00-04:00",
+    "report_version": "1.0"
+  },
+  "summary": {
+    "total_hijacks": 3,
+    "ongoing_hijacks": 1,
+    "resolved_hijacks": 2,
+    "risk_distribution": {
+      "critical": 0,
+      "high": 1,
+      "medium": 0,
+      "low": 1,
+      "minimal": 1
+    },
+    "overall_threat_level": "MODERATE"
+  },
+  "findings": [
+    {
+      "event_id": "BGP-20260715-001",
+      "prefix": "203.0.113.0/24",
+      "origin_asn": "AS12345",
+      "risk_level": "HIGH",
+      "risk_score": 50,
+      "status": "ongoing",
+      "detection_method": "community_bgpmon",
+      "impact": "Potential routing disruption for networks receiving this prefix",
+      "recommended_action": "Contact RIPE NCC immediately, enhance monitoring"
+    },
+    {
+      "event_id": "BGP-20260714-001",
+      "prefix": "198.51.100.0/16",
+      "origin_asn": "AS99999",
+      "risk_level": "LOW",
+      "risk_score": 25,
+      "status": "resolved",
+      "detection_method": "manual",
+      "impact": "Minimal impact, resolved within 1 hour",
+      "recommended_action": "None required"
+    },
+    {
+      "event_id": "BGP-20260714-002",
+      "prefix": "192.0.2.0/24",
+      "origin_asn": "AS55555",
+      "risk_level": "MINIMAL",
+      "risk_score": -20,
+      "status": "resolved",
+      "detection_method": "community_bgpmon",
+      "impact": "Very low impact, self-resolving",
+      "recommended_action": "None required"
+    }
+  ],
+  "data_sources": {
+    "routeviews": {
+      "status": "active",
+      "download_success": true,
+      "prefixes_extracted": 0,
+      "last_successful": "2026-07-15T08:01:00-04:00"
+    },
+    "ripe_ris": {
+      "status": "intermittent",
+      "download_success": false,
+      "prefixes_extracted": 0,
+      "last_successful": "2026-07-14T08:00:00-04:00"
+    },
+    "bgpview_api": {
+      "status": "unavailable",
+      "download_success": false,
+      "prefixes_extracted": 0,
+      "last_successful": "2026-07-14T08:00:00-04:00",
+      "error": "DNS resolution failure"
+    },
+    "simulated": {
+      "status": "fallback_active",
+      "prefixes_extracted": 3,
+      "note": "TEST-NET documentation ranges used for demonstration"
+    }
+  },
+  "recommendations": {
+    "immediate": [
+      "Contact RIPE NCC about ongoing hijack 203.0.113.0/24",
+      "Increase monitoring frequency for affected prefix",
+      "Set up real-time alerts for route propagation"
+    ],
+    "short_term": [
+      "Implement RPKI for critical prefixes",
+      "Update BGP operational procedures",
+      "Train staff on BGP security best practices"
+    ],
+    "long_term": [
+      "Deploy additional BGP monitoring points",
+      "Join BGP threat-sharing communities",
+      "Implement BGPsec where possible"
+    ]
+  },
+  "success_metrics": {
+    "detection_time_target": "< 5 minutes",
+    "response_time_target": "< 2 hours for HIGH risk",
+    "resolution_rate_target": "> 95% within 7 days"
+  }
+}

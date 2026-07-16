@@ -1,0 +1,10 @@
+{
+    "detection_threshold": 0.5,
+    "enable_alerts": true,
+    "quarantine_threats": true,
+    "max_file_size_mb": 10,
+    "supported_formats": ["png", "jpg", "jpeg", "gif", "bmp", "webp"],
+    "log_level": "INFO",
+    "quarantine_dir": "quarantine",
+    "monitoring_interval": 60
+}
